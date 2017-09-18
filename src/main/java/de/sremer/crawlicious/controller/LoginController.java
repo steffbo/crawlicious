@@ -38,11 +38,10 @@ public class LoginController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
-        User userExists = userService.findUserByName(user.getName());
+        User userExists = userService.findUserByEmail(user.getEmail());
         if (userExists != null) {
-            bindingResult
-                    .rejectValue("name", "error.user",
-                            "There is already a user registered with the name provided");
+            bindingResult.rejectValue("email", "error.user",
+                    "There is already a user registered with the E-Mail provided");
         }
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("registration");
@@ -51,7 +50,6 @@ public class LoginController {
             modelAndView.addObject("successMessage", "User has been registered successfully");
             modelAndView.addObject("user", new User());
             modelAndView.setViewName("registration");
-
         }
         return modelAndView;
     }
@@ -60,7 +58,7 @@ public class LoginController {
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByName(auth.getName());
+        User user = userService.findUserByEmail(auth.getName());
         modelAndView.addObject("userName", "Welcome " + user.getName());
         modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
         modelAndView.setViewName("admin/home");

@@ -1,10 +1,12 @@
 package de.sremer.crawlicious.model;
 
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,6 +23,7 @@ public class User {
 
     @Email(message = "*Please provide a valid Email")
     @NotEmpty(message = "*Please provide an email")
+    @NaturalId
     private String email;
 
     @NotEmpty(message = "*Please provide your password")
@@ -36,8 +39,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @OneToMany
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToMany(mappedBy = "user")
     private Set<Posting> postings;
 
     public long getId() {
