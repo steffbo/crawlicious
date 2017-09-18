@@ -18,13 +18,13 @@ public class PostingDaoImpl implements PostingDao {
 
     static {
 
-        postings = new HashMap<Integer, Posting>() {
-            {
-                put(1, new Posting("foo", "foo.com", Arrays.asList(new Tag("foo"))));
-                put(2, new Posting("hello", "hello.org", Arrays.asList(new Tag("hi"), new Tag("welcome"))));
-                put(3, new Posting("world", "pla.net", Arrays.asList(new Tag("crawlicious"))));
-            }
-        };
+//        postings = new HashMap<Integer, Posting>() {
+//            {
+//                put(1, new Posting("foo", "foo.com", Arrays.asList(new Tag("foo"))));
+//                put(2, new Posting("hello", "hello.org", Arrays.asList(new Tag("hi"), new Tag("welcome"))));
+//                put(3, new Posting("world", "pla.net", Arrays.asList(new Tag("crawlicious"))));
+//            }
+//        };
     }
 
     @Override

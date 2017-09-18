@@ -1,7 +1,7 @@
 package de.sremer.crawlicious.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "posting")
@@ -16,16 +16,31 @@ public class Posting {
 
     private String link;
 
-    @OneToMany
-    private List<Tag> tags;
+    @Column(name = "user_id")
+    private long userId;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "posting_tag",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags;
 
     public Posting() {
     }
 
-    public Posting(String title, String link, List<Tag> tags) {
+    public Posting(String title, String link, Set<Tag> tags) {
         this.title = title;
         this.link = link;
         this.tags = tags;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -44,15 +59,37 @@ public class Posting {
         this.link = link;
     }
 
-    public List<Tag> getTags() {
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 
-    public long getId() {
-        return id;
+    public void addTag(Tag tag) {
+        tags.add(tag);
+        tag.getPosts().add(this);
     }
+
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
+        tag.getPosts().remove(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Posting)) return false;
+        return id == ((Posting) o).id;
+    }
+
 }

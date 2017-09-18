@@ -29,12 +29,15 @@ public class User {
 
     private long registeredOn;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     @OneToMany
-    @JoinTable(name = "posting", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "posting_id"))
+    @JoinColumn(name = "user_id", nullable = false)
     private Set<Posting> postings;
 
     public long getId() {
@@ -83,5 +86,22 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+        role.addUser(this);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.removeUser(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        return id == ((User) o).id;
     }
 }

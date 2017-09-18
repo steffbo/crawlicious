@@ -19,10 +19,10 @@ public class PostingItemLayout extends HorizontalLayout {
 
         Binder<Posting> binder = new Binder<>(Posting.class);
         //binder.bindInstanceFields(this);
-        binder.bind(title, Posting::getTitle, Posting::setTitle);
-        binder.bind(link, Posting::getLink, Posting::setLink);
-        binder.bind(tags, Posting::getTags, Posting::setTags);
-        binder.setBean(e);
+//        binder.bind(title, Posting::getTitle, Posting::setTitle);
+//        binder.bind(link, Posting::getLink, Posting::setLink);
+//        binder.bind(tags, Posting::getTags, Posting::setTags);
+//        binder.setBean(e);
 
         addComponents(title, link, tags);
         setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
