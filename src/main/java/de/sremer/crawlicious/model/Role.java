@@ -10,7 +10,7 @@ public class Role {
     @Id
     @GeneratedValue
     @Column(name = "role_id")
-    private int id;
+    private long id;
 
     @Column(name = "role")
     private String role;
@@ -18,7 +18,7 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -54,8 +54,6 @@ public class Role {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Role)) return false;
-        return id == ((Role) o).id;
+        return this == o || o instanceof Role && id == ((Role) o).id;
     }
 }

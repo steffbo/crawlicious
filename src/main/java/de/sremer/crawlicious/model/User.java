@@ -100,8 +100,6 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        return id == ((User) o).id;
+        return this == o || o instanceof User && id == ((User) o).id;
     }
 }

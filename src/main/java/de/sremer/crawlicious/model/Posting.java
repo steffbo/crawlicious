@@ -87,9 +87,7 @@ public class Posting {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Posting)) return false;
-        return id == ((Posting) o).id;
+        return this == o || o instanceof Posting && id == ((Posting) o).id;
     }
 
 }
