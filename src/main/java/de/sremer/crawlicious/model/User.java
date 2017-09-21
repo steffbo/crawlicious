@@ -30,6 +30,8 @@ public class User {
     @Transient
     private String password;
 
+    private boolean enabled;
+
     private long registeredOn;
 
     @ManyToMany
@@ -72,6 +74,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public long getRegisteredOn() {
