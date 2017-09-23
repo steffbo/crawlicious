@@ -19,6 +19,16 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping(value = {"/test"}, method = RequestMethod.GET)
+    public ModelAndView test() {
+        ModelAndView modelAndView = new ModelAndView();
+        User userByEmail = userService.findUserByEmail("stefan.remer@gmail.com");
+        modelAndView.addObject("email", userByEmail.getEmail());
+        modelAndView.addObject("enabled", userByEmail.isEnabled());
+        modelAndView.setViewName("test");
+        return modelAndView;
+    }
+
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();

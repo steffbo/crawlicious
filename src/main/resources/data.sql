@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS role (
   PRIMARY KEY (`role_id`)
 );
 DELETE FROM role;
-INSERT INTO role VALUES (1, 'admin');
-INSERT INTO role VALUES (2, 'user');
+INSERT INTO role VALUES (1, 'ROLE_ADMIN');
+INSERT INTO role VALUES (2, 'ROLE_USER');
