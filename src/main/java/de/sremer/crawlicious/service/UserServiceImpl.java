@@ -5,8 +5,10 @@ import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.RoleRepository;
 import de.sremer.crawlicious.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -49,9 +51,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User getOne(long id) {
+        return userRepository.getOne(id);
+    }
+
+    @Override
     @Transactional
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(userName);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findUserByEmail(email);
         List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
         return buildUserForAuthentication(user, authorities);
     }
@@ -69,6 +76,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
         return new org.springframework.security.core.userdetails.User(user.getEmail(),
                 user.getPassword(), user.isEnabled(), true, true, true, authorities);
+    }
+
+    public User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth != null ? findUserByEmail(auth.getName()) : null;
     }
 
 }

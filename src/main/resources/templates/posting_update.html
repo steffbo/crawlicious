@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="no-js"
+      xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Crawlicious</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css"
+          integrity="sha256-itWEYdFWzZPBG78bJOOiQIn06QCgN/F0wMDcC4nOhxY=" crossorigin="anonymous"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"
+            integrity="sha256-Nd2xznOkrE9HkrAMi4xWy/hXkQraXioBg9iYsBrcFrs=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    Posting
+
+    <form th:action="@{/postings}" method="put">
+
+        <label>
+            Title
+            <input id="title" placeholder="Title" th:value="${posting.title}"/>
+        </label>
+
+        <label>
+            Link
+            <input id="link" placeholder="Link" th:value="${posting.link}"/>
+        </label>
+
+        <label>
+            Tags
+            <input id="tags" placeholder="Tags" th:value="${posting.tags}"/>
+        </label>
+
+        <button type="submit" value="Submit"/>
+
+
+    </form>
+
+</div>
+
+</body>
+</html>

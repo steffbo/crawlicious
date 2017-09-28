@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -98,6 +97,14 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Posting> getPostings() {
+        return postings;
+    }
+
+    public void setPostings(Set<Posting> postings) {
+        this.postings = postings;
     }
 
     public void addRole(Role role) {
