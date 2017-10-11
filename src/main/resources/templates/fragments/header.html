@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+<header class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
@@ -20,9 +20,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li sec:authorize="!isAuthenticated()">
-                    <a href="/login" th:href="@{/login}">
-                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Login
-                    </a>
+                    <div th:replace="fragments/login :: login"></div>
                 </li>
                 <li sec:authorize="!isAuthenticated()">
                     <a href="/registration" th:href="@{/registration}">
@@ -46,6 +44,6 @@
             </ul>
         </div>
     </div>
-</div>
+</header>
 </body>
 </html>
