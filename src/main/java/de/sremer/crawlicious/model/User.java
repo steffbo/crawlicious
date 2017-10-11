@@ -6,11 +6,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Comparable<User> {
 
     @Id
     @GeneratedValue
@@ -100,7 +103,12 @@ public class User {
     }
 
     public Set<Posting> getPostings() {
-        return postings;
+        TreeSet treeSet = new TreeSet(postings);
+        return treeSet;
+    }
+
+    public String getRegistrationDate(String dateformat) {
+        return new SimpleDateFormat(dateformat).format(new Date(this.getRegisteredOn()));
     }
 
     public void setPostings(Set<Posting> postings) {
@@ -120,5 +128,10 @@ public class User {
     @Override
     public boolean equals(Object o) {
         return this == o || o instanceof User && id == ((User) o).id;
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return Long.compare(o.registeredOn, this.registeredOn);
     }
 }
