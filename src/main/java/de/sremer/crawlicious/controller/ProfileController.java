@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.EntityNotFoundException;
+
 @Controller
 public class ProfileController {
 
@@ -32,7 +34,7 @@ public class ProfileController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
+        modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
 
@@ -40,12 +42,20 @@ public class ProfileController {
     public ModelAndView profileById(@PathVariable(value = "id") long id) {
         ModelAndView modelAndView = new ModelAndView();
 
-        LOG.debug(String.format("ID: %d", id));
-        User user = userService.getOne(id);
-
-        modelAndView.addObject("user", user);
-        modelAndView.setViewName("profile");
-        return modelAndView;
+        try {
+            User user = userService.getOne(id);
+            User ownUser = userService.getCurrentUser();
+            if (user.getName().isEmpty()) {
+                return new ModelAndView("redirect:/");
+            }
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("ownProfile", (user == ownUser));
+            modelAndView.setViewName("profile");
+            return modelAndView;
+        } catch (EntityNotFoundException exception) {
+            LOG.warn("Exception! " + exception.getMessage());
+            return new ModelAndView("redirect:/");
+        }
     }
 
 }
