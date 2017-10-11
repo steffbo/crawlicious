@@ -4,6 +4,7 @@ import de.sremer.crawlicious.model.Posting;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.service.PostingService;
 import de.sremer.crawlicious.service.UserService;
+import de.sremer.crawlicious.util.MyUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,19 @@ public class PostingController {
     }
 
     @PostMapping(value = "/insert")
-    public void insertPosting(@ModelAttribute Posting posting) {
+    public ModelAndView insertPosting(
+            @RequestParam(value = "title", required = true) String title,
+            @RequestParam(value = "link", required = true) String link,
+            @RequestParam(value = "tags", required = true) String tags) {
+
+        Posting posting = new Posting(title, link, MyUtility.parseTags(tags));
+        User currentUser = userService.getCurrentUser();
+        posting.setUser(currentUser);
         postingService.insertPosting(posting);
+
+        ModelAndView profile = new ModelAndView("redirect:/profile");
+        profile.addObject("user", currentUser);
+        return profile;
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
