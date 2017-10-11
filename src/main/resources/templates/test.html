@@ -5,8 +5,9 @@
 <body>
 <div class="container">
 
-    <p th:text="${email}">Test</p>
-    <p th:text="${enabled}">Test</p>
+    <th:block th:each="user : ${users}">
+        <p th:text="${user.name + ' ' + user.getRegistrationDate('dd.MM.yyyy')}"></p>
+    </th:block>
 
 </div>
 
