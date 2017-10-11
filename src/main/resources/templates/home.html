@@ -3,13 +3,20 @@
       xmlns="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/template :: head"></head>
 <body>
-<div th:replace="fragments/header :: header"></div>
+<header th:replace="fragments/header :: header"></header>
 
 <div class="container">
     <h1>Homepage</h1>
+
+    <p>Last users</p>
+    <th:block th:each="user : ${users}">
+        <a th:href="@{'/profile/' + ${user.id}}"><span th:text="${user.name}"></span></a>
+        member since: <span th:text="${user.getRegistrationDate('dd.MM.yyyy')}"></span><br>
+    </th:block>
+
 </div>
 
-<div th:replace="fragments/template :: footer"></div>
+<footer th:replace="fragments/footer :: footer"></footer>
 
 </body>
 </html>
