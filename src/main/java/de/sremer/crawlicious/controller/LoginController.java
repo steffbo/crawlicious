@@ -21,20 +21,11 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = {"/test"}, method = RequestMethod.GET)
-    public ModelAndView test() {
-        ModelAndView modelAndView = new ModelAndView();
-        User userByEmail = userService.findUserByEmail("stefan.remer@gmail.com");
-        modelAndView.addObject("email", userByEmail.getEmail());
-        modelAndView.addObject("enabled", userByEmail.isEnabled());
-        modelAndView.setViewName("test");
-        return modelAndView;
-    }
-
     @RequestMapping(value = {"/"})
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("home");
+        modelAndView.addObject("users", userService.listLastUsers(10));
         return modelAndView;
     }
 
@@ -48,9 +39,14 @@ public class LoginController {
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public ModelAndView registration() {
         ModelAndView modelAndView = new ModelAndView();
-        User user = new User();
-        modelAndView.addObject("user", user);
-        modelAndView.setViewName("registration");
+
+        if (userService.getCurrentUser() == null) {
+            User user = new User();
+            modelAndView.addObject("user", user);
+            modelAndView.setViewName("registration");
+        } else {
+            modelAndView.setViewName("redirect:/");
+        }
         return modelAndView;
     }
 
@@ -67,19 +63,8 @@ public class LoginController {
         } else {
             userService.saveUser(user);
             modelAndView.addObject("successMessage", "User has been registered successfully");
-            // modelAndView.addObject("user", new User());
             modelAndView.setViewName("registration");
         }
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/admin/home", method = RequestMethod.GET)
-    public ModelAndView adminHome() {
-        ModelAndView modelAndView = new ModelAndView();
-        User currentUser = userService.getCurrentUser();
-        modelAndView.addObject("userName", "Welcome " + currentUser.getName());
-        modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
-        modelAndView.setViewName("admin/home");
         return modelAndView;
     }
 
