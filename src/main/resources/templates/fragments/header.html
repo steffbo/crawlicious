@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Crawlicious</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()">
+                    <a href="#" th:href="@{/profile}">My profile</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/login" th:href="@{/login}">
+                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Login
+                    </a>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/registration" th:href="@{/registration}">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Create account
+                    </a>
+                </li>
+
+                <li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <a href="/admin" th:href="@{/admin}">
+                        <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>&nbsp;Admin
+                    </a>
+                </li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <!--<span sec:authentication="name"></span>-->
+                    <a href="/logout" th:href="@{/logout}"> <!--onclick="$('#form').submit();">-->
+                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
+                    </a>
+                    <!--<form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>-->
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

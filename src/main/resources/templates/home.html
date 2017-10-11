@@ -1,24 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="no-js"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-    <title>Crawlicious</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css"
-          integrity="sha256-itWEYdFWzZPBG78bJOOiQIn06QCgN/F0wMDcC4nOhxY=" crossorigin="anonymous"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"
-            integrity="sha256-Nd2xznOkrE9HkrAMi4xWy/hXkQraXioBg9iYsBrcFrs=" crossorigin="anonymous"></script>
-</head>
-
+<head th:replace="fragments/template :: head"></head>
 <body>
+<div th:replace="fragments/header :: header"></div>
 
 <div class="container">
-
-    Homepage
-
+    <h1>Homepage</h1>
 </div>
+
+<div th:replace="fragments/template :: footer"></div>
 
 </body>
 </html>

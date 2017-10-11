@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-    <title>Crawlicious</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-
+<head th:replace="fragments/template :: head"></head>
 <body>
+<div th:replace="fragments/header :: header"></div>
 
 <div class="container">
-
     <h1>Profile</h1>
     <p th:text="${user.name}"></p>
 
+    <a href="/postings/insert"/>Insert Posting</a>
+
     <div style="border: 1px;">
         <th:block th:each="posting : ${user.postings}">
-            <p th:text="${posting.title}">Posting title</p>
+            <h3>Posting</h3>
+            Title: <span th:text="${posting.title}">Posting title</span>
+            Link: <a th:href="${posting.link}" target="_blank"> <span th:text="${posting.link}">Tag name</span></a>
+            Tags:
+            <th:block th:each="tag : ${posting.tags}">
+                <span th:text="${tag.name}">Tag name</span>
+            </th:block>
         </th:block>
     </div>
 
