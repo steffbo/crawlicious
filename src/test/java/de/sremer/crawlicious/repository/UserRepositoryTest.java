@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,7 +31,7 @@ public class UserRepositoryTest {
         user.setRegisteredOn(System.currentTimeMillis());
         user.setPassword("foo");
 
-        Role role = roleRepository.findRoleByRole("admin");
+        Role role = roleRepository.findRoleByRole("ADMIN_ROLE");
         user.addRole(role);
 
         userRepository.save(user);
