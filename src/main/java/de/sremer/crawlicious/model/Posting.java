@@ -5,7 +5,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "posting")
-public class Posting {
+public class Posting implements Comparable<Posting> {
 
     @Id
     @GeneratedValue
@@ -19,6 +19,8 @@ public class Posting {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    private long date;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -68,6 +70,14 @@ public class Posting {
         this.user = user;
     }
 
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
+
     public Set<Tag> getTags() {
         return tags;
     }
@@ -91,4 +101,8 @@ public class Posting {
         return this == o || o instanceof Posting && id == ((Posting) o).id;
     }
 
+    @Override
+    public int compareTo(Posting other) {
+        return Long.compare(this.date, other.date);
+    }
 }
