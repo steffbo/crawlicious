@@ -19,7 +19,7 @@ public class MyUtility {
      */
     public static Set<Tag> parseTags(String userInputTags) {
 
-        Pattern pattern = Pattern.compile("(\\w*)*");
+        Pattern pattern = Pattern.compile("([^.,_*~+-\\/&]*)*");
         Matcher matcher = pattern.matcher(userInputTags);
         Set<Tag> tagList = new HashSet<>();
         while (matcher.find()) {
