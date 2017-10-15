@@ -1,6 +1,7 @@
 package de.sremer.crawlicious.util;
 
 import de.sremer.crawlicious.model.Tag;
+import de.sremer.crawlicious.service.TagService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +18,7 @@ public class MyUtility {
      * @param userInputTags
      * @return Set of Tags
      */
-    public static Set<Tag> parseTags(String userInputTags) {
+    public static Set<Tag> parseTags(TagService tagService, String userInputTags) {
 
         Pattern pattern = Pattern.compile("([^.,_*~+-\\/&]*)*");
         Matcher matcher = pattern.matcher(userInputTags);
@@ -25,7 +26,7 @@ public class MyUtility {
         while (matcher.find()) {
             String tagString = matcher.group(0);
             if (!tagString.isEmpty()) {
-                tagList.add(new Tag(tagString));
+                tagList.add(tagService.getTagByName(tagString));
             }
         }
         return tagList;
