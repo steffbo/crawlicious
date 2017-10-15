@@ -6,8 +6,8 @@
 
     <span class="postingtitle" th:text="${posting.title}">Posting title</span><br>
     <a th:href="${posting.link}" target="_blank"> <span th:text="${posting.link}">Tag name</span></a>
-    <div th:if="${not #lists.isEmpty(posting.postingTags)}">
-        <th:block th:each="tag : ${posting.postingTags}">
+    <div th:if="${not #lists.isEmpty(posting.tags)}">
+        <th:block th:each="tag : ${posting.tags}">
             <span class="tag" th:text="${tag.name}">Tag name</span>
         </th:block>
     </div>

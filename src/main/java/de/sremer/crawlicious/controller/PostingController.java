@@ -63,7 +63,7 @@ public class PostingController {
         Posting posting = postingService.getPostingById(Long.valueOf(id));
         posting.setTitle(title);
         posting.setLink(link);
-        posting.setPostingTags(MyUtility.parseTags(tagService, tags));
+        posting.setTags(MyUtility.parseTags(tagService, tags));
         postingService.insertPosting(posting);
 
         return new ModelAndView("redirect:/profile");
@@ -78,7 +78,7 @@ public class PostingController {
         modelAndView.addObject("id", id);
         modelAndView.addObject("title", posting.getTitle());
         modelAndView.addObject("link", posting.getLink());
-        modelAndView.addObject("tags", MyUtility.getStringFromTags(posting.getPostingTags()));
+        modelAndView.addObject("tags", MyUtility.getStringFromTags(posting.getTags()));
         modelAndView.setViewName("posting_update");
         return modelAndView;
     }
