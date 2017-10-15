@@ -7,24 +7,34 @@
 
 <div class="container">
     <h1>Update Posting</h1>
-    <form th:action="@{/postings}" method="put">
+    <form th:action="@{/postings/update}" method="post">
 
-        <label>
-            Title
-            <input id="title" placeholder="Title" th:value="${posting.title}"/>
-        </label>
+        <input name="id" id="id" th:value="${id}" hidden>
 
-        <label>
-            Link
-            <input id="link" placeholder="Link" th:value="${posting.link}"/>
-        </label>
+        <div class="form-group">
+            <label>Title
+                <input name="title" id="title" placeholder="Title" class="form-control" th:value="${title}"/>
+            </label>
+        </div>
 
-        <label>
-            Tags
-            <input id="tags" placeholder="Tags" th:value="${posting.tags}"/>
-        </label>
+        <div class="form-group">
+            <label>Link
+                <input name="link" id="link" placeholder="Link" class="form-control" th:value="${link}"/>
+            </label>
+        </div>
 
-        <button type="submit" value="Submit"/>
+        <div class="form-group">
+            <label>Tags
+                <input name="postingTags" id="postingTags" placeholder="Tags" class="form-control" th:value="${postingTags}"/>
+                <span class="label label-info"
+                      data-toggle="tooltip" data-placement="bottom"
+                      title="Tags can be separated by almost anything except underscores">Info</span>
+            </label>
+        </div>
+
+        <br>
+        <a class="btn btn-default" th:href="@{'/profile'}">Cancel</a>
+        <button type="submit" value="Submit" class="btn btn-default">Submit</button>
 
 
     </form>
