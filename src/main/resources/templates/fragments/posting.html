@@ -5,13 +5,18 @@
 <div th:fragment="posting" class="posting">
 
     <span class="postingtitle" th:text="${posting.title}">Posting title</span><br>
+
+    <div th:if="${ownProfile}" style="float: right;">
+        <a class="btn btn-info" th:href="@{'/postings/update/' + ${posting.id}}">Update</a>
+    </div>
+
     <a th:href="${posting.link}" target="_blank"> <span th:text="${posting.link}">Tag name</span></a>
     <div th:if="${not #lists.isEmpty(posting.tags)}">
         <th:block th:each="tag : ${posting.tags}">
             <span class="tag" th:text="${tag.name}">Tag name</span>
         </th:block>
     </div>
-    <a th:href="@{'/postings/update/' + ${posting.id}}">Update</a>
+
 
 </div>
 
