@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/template :: head"></head>
+<body>
+<div class="container">
+
+    <th:block th:each="user : ${users}">
+        <p th:text="${user.name + ' ' + user.getRegistrationDate('dd.MM.yyyy')}"></p>
+    </th:block>
+
+</div>
+
+</body>
+</html>

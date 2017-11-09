@@ -1,11 +1,24 @@
 package de.sremer.crawlicious.service;
 
 import de.sremer.crawlicious.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     User findUserByEmail(String email);
+
     List<User> findUserByName(String name);
+
     void saveUser(User user);
+
+    User getOne(long id);
+
+    User getCurrentUser();
+
+    Page<User> listAllByPage(Pageable pageable);
+
+    Set<User> listLastUsers(int amount);
 }

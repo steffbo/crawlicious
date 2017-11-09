@@ -1,37 +1,55 @@
 package de.sremer.crawlicious.service;
 
-import de.sremer.crawlicious.dao.PostingDao;
 import de.sremer.crawlicious.model.Posting;
+import de.sremer.crawlicious.model.Tag;
+import de.sremer.crawlicious.repository.PostingRepository;
+import de.sremer.crawlicious.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 
 @Service
 public class PostingService {
 
-    @Autowired
-    @Qualifier("fakeDao")
-    private PostingDao postingDao;
+    private PostingRepository postingRepository;
+    private TagService tagService;
 
-    public Collection<Posting> getPostings() {
-        return postingDao.getPostings();
+    public PostingService(PostingRepository postingRepository, TagService tagService) {
+        this.postingRepository = postingRepository;
+        this.tagService = tagService;
     }
 
-    public Posting getPostingById(int id) {
-        return this.postingDao.getPostingById(id);
+    public List<Posting> getPostings() {
+        return this.postingRepository.findAll();
     }
 
-    public void deletePostingById(int id) {
-        this.postingDao.deletePostingById(id);
+    public Posting getPostingById(long id) {
+        return this.postingRepository.findOne(id);
+    }
+
+    public void deletePostingById(long id) {
+        this.postingRepository.delete(id);
     }
 
     public void updatePosting(Posting posting) {
-        this.postingDao.updatePosting(posting);
+        this.postingRepository.save(posting);
     }
 
     public void insertPosting(Posting posting) {
-        postingDao.insertPosting(posting);
+
+        posting.setDate(System.currentTimeMillis());
+        this.postingRepository.save(posting);
+    }
+
+    public void addTagToPosting(long postingId, String tag) {
+        Posting posting = postingRepository.getOne(postingId);
+        posting.addTag(tagService.getTagByName(tag));
+    }
+
+    public void removeTagFromPosting(Long postingId, Long tagId) {
+        Posting posting = postingRepository.getOne(postingId);
+        Tag tag = tagService.getTag(tagId);
+        posting.removeTag(tag);
     }
 }

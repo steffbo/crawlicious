@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+
+<div th:fragment="login">
+    <form th:action="@{/login}" method="POST" class="navbar-form navbar-right">
+
+        <div class="login" th:classappend="${(param.login != null) and (param.login[0] == 'error')} ? error">
+            <input type="email" id="email" name="email" required
+                   placeholder="E-Mail" class="form-control input-sm">
+            <input type="password" id="password" name="password" title="password" required
+                   placeholder="Password" class="form-control input-sm">
+
+            <button class="btn btn-default btn-xs" name="Submit" value="Login" type="Submit" th:text="Login"></button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

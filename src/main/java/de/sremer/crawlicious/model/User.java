@@ -6,12 +6,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Comparable<User> {
 
     @Id
     @GeneratedValue
@@ -29,6 +31,8 @@ public class User {
     @NotEmpty(message = "*Please provide your password")
     @Transient
     private String password;
+
+    private boolean enabled;
 
     private long registeredOn;
 
@@ -74,6 +78,14 @@ public class User {
         this.email = email;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public long getRegisteredOn() {
         return registeredOn;
     }
@@ -90,6 +102,19 @@ public class User {
         this.roles = roles;
     }
 
+    public Set<Posting> getPostings() {
+        TreeSet treeSet = new TreeSet(postings);
+        return treeSet;
+    }
+
+    public String getRegistrationDate(String dateformat) {
+        return new SimpleDateFormat(dateformat).format(new Date(this.getRegisteredOn()));
+    }
+
+    public void setPostings(Set<Posting> postings) {
+        this.postings = postings;
+    }
+
     public void addRole(Role role) {
         this.roles.add(role);
         role.addUser(this);
@@ -103,5 +128,10 @@ public class User {
     @Override
     public boolean equals(Object o) {
         return this == o || o instanceof User && id == ((User) o).id;
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return Long.compare(o.registeredOn, this.registeredOn);
     }
 }

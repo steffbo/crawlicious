@@ -2,9 +2,9 @@ package de.sremer.crawlicious.controller;
 
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +16,20 @@ import javax.validation.Valid;
 @Controller
 public class LoginController {
 
+    static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
+
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/"})
+    public ModelAndView home() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
+        modelAndView.addObject("users", userService.listLastUsers(10));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
@@ -29,9 +39,14 @@ public class LoginController {
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public ModelAndView registration() {
         ModelAndView modelAndView = new ModelAndView();
-        User user = new User();
-        modelAndView.addObject("user", user);
-        modelAndView.setViewName("registration");
+
+        if (userService.getCurrentUser() == null) {
+            User user = new User();
+            modelAndView.addObject("user", user);
+            modelAndView.setViewName("registration");
+        } else {
+            modelAndView.setViewName("redirect:/");
+        }
         return modelAndView;
     }
 
@@ -48,20 +63,8 @@ public class LoginController {
         } else {
             userService.saveUser(user);
             modelAndView.addObject("successMessage", "User has been registered successfully");
-            modelAndView.addObject("user", new User());
             modelAndView.setViewName("registration");
         }
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/admin/home", method = RequestMethod.GET)
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
-        modelAndView.addObject("userName", "Welcome " + user.getName());
-        modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
-        modelAndView.setViewName("admin/home");
         return modelAndView;
     }
 

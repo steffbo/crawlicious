@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/template :: head"></head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+    <h1>Update Posting</h1>
+    <form th:action="@{/postings/update}" method="post">
+
+        <input name="id" id="id" th:value="${id}" hidden>
+
+        <div class="form-group">
+            <label>Title
+                <input name="title" id="title" placeholder="Title" class="form-control" th:value="${title}"/>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>Link
+                <input name="link" id="link" placeholder="Link" class="form-control" th:value="${link}"/>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>Tags
+                <input name="postingTags" id="postingTags" placeholder="Tags" class="form-control" th:value="${postingTags}"/>
+                <span class="label label-info"
+                      data-toggle="tooltip" data-placement="bottom"
+                      title="Tags can be separated by almost anything except underscores">Info</span>
+            </label>
+        </div>
+
+        <br>
+        <a class="btn btn-default" th:href="@{'/profile'}">Cancel</a>
+        <button type="submit" value="Submit" class="btn btn-default">Submit</button>
+
+
+    </form>
+
+</div>
+
+</body>
+</html>
