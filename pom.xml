@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.sremer</groupId>
+    <groupId>es.woofl</groupId>
     <artifactId>crawlicious</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1</version>
     <packaging>jar</packaging>
 
     <name>Crawlicious</name>
@@ -50,6 +50,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -66,6 +75,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.2</version>
         </dependency>
 
         <dependency>
@@ -87,13 +102,62 @@
         </dependencies>
     </dependencyManagement>
 
+    <scm>
+        <connection>scm:svn:http://127.0.0.1/dummy</connection>
+        <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://127.0.0.1/dummy</url>
+    </scm>
+
     <build>
+
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>buildnumber</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <format>{0,number}</format>
+                    <items>
+                        <item>buildNumber</item>
+                    </items>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <revisionOnScmFailure>unknownbuild</revisionOnScmFailure>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.bazaarvoice.maven.plugins</groupId>
+                <artifactId>s3-upload-maven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <bucketName>woofles</bucketName>
+                    <accessKey>${env.WOOFLES3ACCESSKEY}</accessKey>
+                    <secretKey>${env.WOOFLES3SECRETKEY}</secretKey>
+                    <endpoint>s3.eu-central-1.amazonaws.com</endpoint>
+                    <source>target/crawlicious-0.1.2.jar</source>
+                    <destination>woofles.jar</destination>
+                </configuration>
+            </plugin>
+
         </plugins>
+        <finalName>${project.artifactId}-${project.version}.${buildNumber}</finalName>
     </build>
 
 
