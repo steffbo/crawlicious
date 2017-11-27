@@ -2,9 +2,11 @@ package de.sremer.crawlicious.controller;
 
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.service.UserService;
+import de.sremer.crawlicious.service.mail.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,10 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    @Qualifier("mailgunapi")
+    private MailService mailService;
+
     @RequestMapping(value = {"/admin"}, method = RequestMethod.GET)
     public ModelAndView adminHome() {
         ModelAndView modelAndView = new ModelAndView();
@@ -38,6 +44,9 @@ public class AdminController {
         Set<User> lastUsers = userService.listLastUsers(10);
         modelAndView.addObject("users", lastUsers);
         modelAndView.setViewName("test");
+
+        mailService.send("stefan.remer@gmail.com", "foo", "hello world");
+
         return modelAndView;
     }
 

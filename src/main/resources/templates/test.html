@@ -3,7 +3,10 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/template :: head"></head>
 <body>
+<div th:replace="fragments/header :: header"></div>
 <div class="container">
+
+    <h1>Test</h1>
 
     <th:block th:each="user : ${users}">
         <p th:text="${user.name + ' ' + user.getRegistrationDate('dd.MM.yyyy')}"></p>

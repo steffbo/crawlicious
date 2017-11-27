@@ -17,10 +17,18 @@
                 <li sec:authorize="isAuthenticated()">
                     <a href="#" th:href="@{/profile}">My profile</a>
                 </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="#" th:href="@{/settings}">User settings</a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li sec:authorize="!isAuthenticated()">
                     <div th:replace="fragments/login :: login"></div>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/registration" th:href="@{/password_reset}">
+                        <span class="glyphicon glyphicon-console" aria-hidden="true"></span>&nbsp;Reset password
+                    </a>
                 </li>
                 <li sec:authorize="!isAuthenticated()">
                     <a href="/registration" th:href="@{/registration}">

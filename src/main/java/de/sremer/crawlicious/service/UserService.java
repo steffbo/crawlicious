@@ -18,7 +18,11 @@ public interface UserService {
 
     User getCurrentUser();
 
+    void changeUserPassword(User user, String password);
+
     Page<User> listAllByPage(Pageable pageable);
 
     Set<User> listLastUsers(int amount);
+
+    void createPasswordResetTokenForUser(User user, String token);
 }

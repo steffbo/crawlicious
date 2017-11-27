@@ -1,8 +1,10 @@
 package de.sremer.crawlicious.service;
 
+import de.sremer.crawlicious.model.PasswordResetToken;
 import de.sremer.crawlicious.model.Role;
 import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.User;
+import de.sremer.crawlicious.repository.PasswordRestTokenRepository;
 import de.sremer.crawlicious.repository.RoleRepository;
 import de.sremer.crawlicious.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordRestTokenRepository passwordResetTokenRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -95,6 +100,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public void createPasswordResetTokenForUser(User user, String token) {
+        PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordResetTokenRepository.save(myToken);
+    }
+
+    @Override
+    public void changeUserPassword(User user, String password) {
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    @Override
     public Page<User> listAllByPage(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
@@ -104,9 +121,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (pageable == null) {
             pageable = new PageRequest(0, 20);
         }
-
-
         return null;
     }
+
 
 }
