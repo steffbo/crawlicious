@@ -97,7 +97,7 @@ public class LoginController {
             mailService.send(userExists.getEmail(),
                     "Woofl.es Password reset",
                     "Your password reset token: " + token + "\n" +
-                            "http://localhost/password_reset_token?token=" + token);
+                            "http://woofl.es/password_reset_token?token=" + token);
             ModelAndView modelAndView = new ModelAndView("password_reset_thanks");
             return modelAndView;
         } else {

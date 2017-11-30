@@ -151,7 +151,7 @@
                     <accessKey>${env.WOOFLES3ACCESSKEY}</accessKey>
                     <secretKey>${env.WOOFLES3SECRETKEY}</secretKey>
                     <endpoint>s3.eu-central-1.amazonaws.com</endpoint>
-                    <source>target/crawlicious-0.1.2.jar</source>
+                    <source>target/crawlicious-0.1.3.jar</source>
                     <destination>woofles.jar</destination>
                 </configuration>
             </plugin>
