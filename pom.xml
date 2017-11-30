@@ -143,15 +143,43 @@
             </plugin>
 
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0-alpha-1</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${basedir}/buildNumber.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>com.bazaarvoice.maven.plugins</groupId>
                 <artifactId>s3-upload-maven-plugin</artifactId>
                 <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>s3upload</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>s3-upload</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <bucketName>woofles</bucketName>
                     <accessKey>${env.WOOFLES3ACCESSKEY}</accessKey>
                     <secretKey>${env.WOOFLES3SECRETKEY}</secretKey>
                     <endpoint>s3.eu-central-1.amazonaws.com</endpoint>
-                    <source>target/crawlicious-0.1.3.jar</source>
+                    <source>target/crawlicious-0.1.${buildNumber}.jar</source>
                     <destination>woofles.jar</destination>
                 </configuration>
             </plugin>
