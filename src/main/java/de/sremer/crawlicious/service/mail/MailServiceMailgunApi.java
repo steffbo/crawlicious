@@ -6,6 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -44,9 +45,6 @@ public class MailServiceMailgunApi implements MailService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         RestTemplate template = new RestTemplate();
 
-        System.out.println("url = " + url);
-        System.out.println("apikey = " + apikey);
-
-        // ResponseEntity<String> stringResponseEntity = template.postForEntity(uri, request, String.class);
+        ResponseEntity<String> stringResponseEntity = template.postForEntity(uri, request, String.class);
     }
 }
