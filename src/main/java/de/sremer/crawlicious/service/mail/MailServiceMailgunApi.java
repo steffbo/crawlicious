@@ -1,10 +1,11 @@
 package de.sremer.crawlicious.service.mail;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -15,10 +16,14 @@ import java.util.Base64;
 
 @Component
 @Qualifier("mailgunapi")
+@PropertySource("classpath:application.properties")
 public class MailServiceMailgunApi implements MailService {
 
-    private String url = "https://api.mailgun.net/v3/woofl.es";
-    private String apikey = "key-54b2cd2bcab7f9f1a8e843a029ca1bc5";
+    @Value("${mailgun.url}")
+    private String url;
+
+    @Value("${mailgun.apikey}")
+    private String apikey;
 
     @Async
     public void send(String to, String subject, String text) {
@@ -38,6 +43,10 @@ public class MailServiceMailgunApi implements MailService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         RestTemplate template = new RestTemplate();
-        ResponseEntity<String> stringResponseEntity = template.postForEntity(uri, request, String.class);
+
+        System.out.println("url = " + url);
+        System.out.println("apikey = " + apikey);
+
+        // ResponseEntity<String> stringResponseEntity = template.postForEntity(uri, request, String.class);
     }
 }
