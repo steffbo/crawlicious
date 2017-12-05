@@ -1,5 +1,8 @@
 package de.sremer.crawlicious.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,37 +13,19 @@ public class Role {
     @Id
     @GeneratedValue
     @Column(name = "role_id")
+    @Getter
+    @Setter
     private long id;
 
     @Column(name = "role")
+    @Getter
+    @Setter
     private String role;
 
     @ManyToMany(mappedBy = "roles")
+    @Getter
+    @Setter
     private Set<User> users;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 
     public void addUser(User user) {
         this.users.add(user);

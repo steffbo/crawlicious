@@ -1,5 +1,7 @@
 package de.sremer.crawlicious.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -14,12 +16,18 @@ public class Tag {
     @Id
     @GeneratedValue
     @Column(name = "tag_id")
+    @Getter
+    @Setter
     private long id;
 
     @NaturalId
+    @Getter
+    @Setter
     private String name;
 
     @ManyToMany(mappedBy = "tags")
+    @Getter
+    @Setter
     private List<Posting> posts = new ArrayList<>();
 
     public Tag() {
@@ -27,30 +35,6 @@ public class Tag {
 
     public Tag(String name) {
         this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Posting> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Posting> posts) {
-        this.posts = posts;
     }
 
     @Override

@@ -1,5 +1,8 @@
 package de.sremer.crawlicious.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,16 +13,26 @@ public class Posting implements Comparable<Posting> {
     @Id
     @GeneratedValue
     @Column(name = "posting_id")
+    @Getter
+    @Setter
     private long id;
 
+    @Getter
+    @Setter
     private String title;
 
+    @Getter
+    @Setter
     private String link;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @Getter
+    @Setter
     private User user;
 
+    @Getter
+    @Setter
     private long date;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -27,6 +40,8 @@ public class Posting implements Comparable<Posting> {
             name = "posting_tag",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @Getter
+    @Setter
     private Set<Tag> tags;
 
     public Posting() {
@@ -35,54 +50,6 @@ public class Posting implements Comparable<Posting> {
     public Posting(String title, String link, Set<Tag> tags) {
         this.title = title;
         this.link = link;
-        this.tags = tags;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public long getDate() {
-        return date;
-    }
-
-    public void setDate(long date) {
-        this.date = date;
-    }
-
-    public Set<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 

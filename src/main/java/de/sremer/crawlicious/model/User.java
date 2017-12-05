@@ -1,5 +1,7 @@
 package de.sremer.crawlicious.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -18,22 +20,34 @@ public class User implements Comparable<User> {
     @Id
     @GeneratedValue
     @Column(name = "user_id")
+    @Getter
+    @Setter
     private long id;
 
     @NotEmpty(message = "*Please provide your name")
+    @Getter
+    @Setter
     private String name;
 
     @Email(message = "*Please provide a valid Email")
     @NotEmpty(message = "*Please provide an email")
     @NaturalId
+    @Getter
+    @Setter
     private String email;
 
     @NotEmpty(message = "*Please provide your password")
     @Transient
+    @Getter
+    @Setter
     private String password;
 
+    @Getter
+    @Setter
     private boolean enabled;
 
+    @Getter
+    @Setter
     private long registeredOn;
 
     @ManyToMany
@@ -41,66 +55,14 @@ public class User implements Comparable<User> {
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @Getter
+    @Setter
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")
+    @Getter
+    @Setter
     private Set<Posting> postings;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public long getRegisteredOn() {
-        return registeredOn;
-    }
-
-    public void setRegisteredOn(long registeredOn) {
-        this.registeredOn = registeredOn;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 
     public Set<Posting> getPostings() {
         TreeSet treeSet = new TreeSet(postings);
@@ -109,10 +71,6 @@ public class User implements Comparable<User> {
 
     public String getRegistrationDate(String dateformat) {
         return new SimpleDateFormat(dateformat).format(new Date(this.getRegisteredOn()));
-    }
-
-    public void setPostings(Set<Posting> postings) {
-        this.postings = postings;
     }
 
     public void addRole(Role role) {
