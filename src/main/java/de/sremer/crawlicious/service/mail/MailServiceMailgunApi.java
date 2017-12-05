@@ -2,7 +2,6 @@ package de.sremer.crawlicious.service.mail;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,7 +16,6 @@ import java.util.Base64;
 
 @Component
 @Qualifier("mailgunapi")
-@PropertySource("classpath:application.properties")
 public class MailServiceMailgunApi implements MailService {
 
     @Value("${mailgun.url}")
