@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/template :: head"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<div class="container">
+    <h1>CSV Import</h1>
+
+    <form action="#" method="post">
+
+        <textarea name="csv" id="csv" rows="20" cols="100" required
+                  placeholder="Title,URL,Tag1;Tag2;TagN"></textarea><br>
+        <input type="submit" value="Submit" class="btn btn-default">
+    </form>
+
+</div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

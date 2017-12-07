@@ -11,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collection;
-
 @RestController
 @RequestMapping("/postings")
 public class PostingController {
@@ -101,9 +99,27 @@ public class PostingController {
         return new ModelAndView("redirect:/profile");
     }
 
-    @GetMapping
-    public Collection<Posting> getPostings() {
-        return postingService.getPostings();
+    @GetMapping(value = "/csv_import")
+    public ModelAndView csvImportGet() {
+        System.out.println("foo");
+        return new ModelAndView("csv_import");
+    }
+
+    @PostMapping(value = "/csv_import")
+    public ModelAndView csvImportPost(@RequestParam(value = "csv", required = true) String csv) {
+
+        String[] lines = csv.split("\n");
+        for (String line : lines) {
+            String[] values = line.split(",");
+
+            Posting posting = new Posting(values[0], values[1], MyUtility.parseTags(tagService, values[2]));
+            User currentUser = userService.getCurrentUser();
+            posting.setUser(currentUser);
+            postingService.insertPosting(posting);
+        }
+
+        ModelAndView profile = new ModelAndView("redirect:/profile");
+        return profile;
     }
 
     @GetMapping(value = "/{id}")
@@ -111,9 +127,11 @@ public class PostingController {
         return postingService.getPostingById(id);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public void deletePostingById(@PathVariable("id") int id) {
+    @GetMapping(value = "/delete/{id}")
+    public ModelAndView deletePostingById(@PathVariable("id") int id) {
+
         postingService.deletePostingById(id);
+        return new ModelAndView("redirect:/profile");
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -125,6 +143,5 @@ public class PostingController {
     public void insertJsonPosting(@RequestBody Posting posting) {
         postingService.insertPosting(posting);
     }
-
 
 }
