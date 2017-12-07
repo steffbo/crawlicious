@@ -13,14 +13,14 @@ public class MyUtility {
 
     /**
      * Parses a string that the users entered as the tags for a posting.
-     * Tags can be separated by ^ . , _ * ~ + - \ / & and space. 
+     * Tags can be separated by ^ . , ; _ * ~ + - \ / & and space.
      *
      * @param userInputTags
      * @return Set of Tags
      */
     public static Set<Tag> parseTags(TagService tagService, String userInputTags) {
 
-        Pattern pattern = Pattern.compile("([^.,_*~+-\\/& ]*)*");
+        Pattern pattern = Pattern.compile("([^.,;_*~+-\\/& ]*)*");
         Matcher matcher = pattern.matcher(userInputTags);
         Set<Tag> tagList = new HashSet<>();
         while (matcher.find()) {
