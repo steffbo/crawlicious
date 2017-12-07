@@ -8,6 +8,7 @@
 
     <div th:if="${ownProfile}" style="float: right;">
         <a class="btn btn-info" th:href="@{'/postings/update/' + ${posting.id}}">Update</a>
+        <a class="btn btn-danger" th:href="@{'/postings/delete/' + ${posting.id}}">Delete</a>
     </div>
 
     <a th:href="${posting.link}" target="_blank"> <span th:text="${posting.link}">Tag name</span></a>
