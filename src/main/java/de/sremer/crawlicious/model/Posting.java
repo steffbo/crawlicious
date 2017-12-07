@@ -70,6 +70,6 @@ public class Posting implements Comparable<Posting> {
 
     @Override
     public int compareTo(Posting other) {
-        return Long.compare(this.date, other.date);
+        return Long.compare(other.date, this.date);
     }
 }
