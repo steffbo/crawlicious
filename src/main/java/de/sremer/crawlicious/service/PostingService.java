@@ -2,9 +2,10 @@ package de.sremer.crawlicious.service;
 
 import de.sremer.crawlicious.model.Posting;
 import de.sremer.crawlicious.model.Tag;
+import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.PostingRepository;
-import de.sremer.crawlicious.repository.TagRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,14 @@ public class PostingService {
 
     public List<Posting> getPostings() {
         return this.postingRepository.findAll();
+    }
+
+    public List<Posting> getPostingsByUser(User user) {
+        return this.postingRepository.findAllByUser(user);
+    }
+
+    public Page<Posting> getPostingsPageByUser(User user, Pageable pageable) {
+        return this.postingRepository.findByUser(user, pageable);
     }
 
     public Posting getPostingById(long id) {

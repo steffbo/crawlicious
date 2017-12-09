@@ -14,11 +14,13 @@
         <button type="submit" class="btn btn-primary" onclick="location.href='/postings/csv_import'">CSV Import</button>
     </div>
 
+    <div th:replace="fragments/pagination :: paginationbar"></div>
     <div style="border: 1px;">
-        <th:block th:each="posting : ${user.postings}">
+        <th:block th:each="posting : ${postings}">
             <div th:replace="fragments/posting :: posting"></div>
         </th:block>
     </div>
+    <div th:replace="fragments/pagination :: paginationbar"></div>
 
 </div>
 
