@@ -62,7 +62,7 @@ public class PostingController {
         posting.setTitle(title);
         posting.setLink(link);
         posting.setTags(MyUtility.parseTags(tagService, tags));
-        postingService.insertPosting(posting);
+        postingService.updatePosting(posting);
 
         return new ModelAndView("redirect:/profile");
     }
