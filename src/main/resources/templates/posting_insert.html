@@ -11,19 +11,21 @@
 
         <div class="form-group">
             <label>Title
-                <input name="title" id="title" placeholder="Title" class="form-control"/>
+                <input name="title" id="title" placeholder="Title" class="form-control" required/>
             </label>
         </div>
 
         <div class="form-group">
             <label>Link
-                <input name="link" id="link" placeholder="Link" class="form-control"/>
+                <input name="link" id="link" placeholder="http(s)://" required
+                       class="form-control" th:value="${oldLink} ? ${oldLink} : ''"/>
             </label>
+            <label class="validation-message" th:if="${linkError}" th:text="${linkError}"></label>
         </div>
 
         <div class="form-group">
             <label>Tags
-                <input name="tags" id="tags" placeholder="Tags" class="form-control"/>
+                <input name="tags" id="tags" placeholder="put some tags here" class="form-control"/>
                 <span class="label label-info"
                       data-toggle="tooltip" data-placement="bottom"
                       title="Tags can be separated by a space or any of the following symbols: ^ . , _ * ~ + - / & ">Info</span>

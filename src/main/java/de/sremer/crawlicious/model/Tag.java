@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tag")
-public class Tag {
+public class Tag implements Comparable<Tag> {
 
     @Id
     @GeneratedValue
@@ -40,5 +40,10 @@ public class Tag {
     @Override
     public boolean equals(Object o) {
         return this == o || o instanceof Tag && Objects.equals(name, ((Tag) o).name);
+    }
+
+    @Override
+    public int compareTo(Tag o) {
+        return name.compareTo(o.name);
     }
 }

@@ -2,9 +2,12 @@ package de.sremer.crawlicious.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "posting")
@@ -19,10 +22,13 @@ public class Posting implements Comparable<Posting> {
 
     @Getter
     @Setter
+    @NotNull(message = "Title is required")
     private String title;
 
     @Getter
     @Setter
+    @NotNull(message = "Link is required")
+    @URL(message = "Provided URL is invalid")
     private String link;
 
     @ManyToOne
@@ -40,7 +46,7 @@ public class Posting implements Comparable<Posting> {
             name = "posting_tag",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    @Getter
+
     @Setter
     private Set<Tag> tags;
 
@@ -51,6 +57,11 @@ public class Posting implements Comparable<Posting> {
         this.title = title;
         this.link = link;
         this.tags = tags;
+    }
+
+    public Set<Tag> getTags() {
+        TreeSet treeSet = new TreeSet(tags);
+        return treeSet;
     }
 
     public void addTag(Tag tag) {

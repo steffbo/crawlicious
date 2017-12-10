@@ -6,8 +6,10 @@ import de.sremer.crawlicious.service.PostingService;
 import de.sremer.crawlicious.service.TagService;
 import de.sremer.crawlicious.service.UserService;
 import de.sremer.crawlicious.util.MyUtility;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,18 +39,28 @@ public class PostingController {
 
     @PostMapping(value = "/insert")
     public ModelAndView insertPosting(
-            @RequestParam(value = "title", required = true) String title,
-            @RequestParam(value = "link", required = true) String link,
+            @Validated @RequestParam(value = "title", required = true) String title,
+            @Validated @RequestParam(value = "link", required = true) String link,
             @RequestParam(value = "tags", required = true) String tags) {
 
-        Posting posting = new Posting(title, link, MyUtility.parseTags(tagService, tags));
-        User currentUser = userService.getCurrentUser();
-        posting.setUser(currentUser);
-        postingService.insertPosting(posting);
+        UrlValidator urlValidator = new UrlValidator();
 
-        ModelAndView profile = new ModelAndView("redirect:/profile");
-        profile.addObject("user", currentUser);
-        return profile;
+        if (urlValidator.isValid(link)) {
+
+            Posting posting = new Posting(title, link, MyUtility.parseTags(tagService, tags));
+            User currentUser = userService.getCurrentUser();
+            posting.setUser(currentUser);
+            postingService.insertPosting(posting);
+
+            ModelAndView profile = new ModelAndView("redirect:/profile");
+            profile.addObject("user", currentUser);
+            return profile;
+        } else {
+            ModelAndView insert = new ModelAndView("posting_insert");
+            insert.addObject("linkError", "Provided link is invalid.");
+            insert.addObject("oldLink", link);
+            return insert;
+        }
     }
 
     @PostMapping(value = "/update")
@@ -111,6 +123,8 @@ public class PostingController {
         String[] lines = csv.split("\n");
         for (String line : lines) {
             String[] values = line.split(",");
+
+            // TODO: validate input
 
             Posting posting = new Posting(values[0], values[1], MyUtility.parseTags(tagService, values[2]));
             User currentUser = userService.getCurrentUser();
