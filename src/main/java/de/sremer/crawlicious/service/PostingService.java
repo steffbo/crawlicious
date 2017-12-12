@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,27 +37,18 @@ public class PostingService {
 
     public Page<Posting> getPostingsPageByUserAndTags(User user, List<Tag> tags, Pageable pageable) {
 
-        List<Posting> postings = new ArrayList<>();
-        for (Tag tag : tags) {
+        List<String> tagList = tags.stream().map(Tag::getName).collect(Collectors.toList());
+        List<Posting> byUserAndTag = this.postingRepository.findByUserAndTags(user.getId(), tagList);
+        int pageNumber = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+        int count = byUserAndTag.size();
 
-            List<Posting> byUserAndTag = this.postingRepository.findByUserAndTags(user.getId(), tag.getName());
-            for (Posting p : byUserAndTag) {
-                if (!postings.contains(p)) {
-                    postings.add(p);
-                }
-            }
-        }
+        int from = pageNumber * pageSize;
+        int to = from + pageSize;
+        to = to > count ? count : to;
+        List<Posting> subList = byUserAndTag.subList(from, to);
 
-        long time = System.currentTimeMillis();
-        System.out.println("START");
-
-        List<Posting> collect = postings.stream()
-                .filter(p -> p.getTags().containsAll(tags))
-                .collect(Collectors.toList());
-
-        System.out.println("FINISH " + (System.currentTimeMillis() - time));
-
-        return new PageImpl<>(collect, pageable, collect.size());
+        return new PageImpl<>(subList, pageable, count);
     }
 
     public Posting getPostingById(long id) {
