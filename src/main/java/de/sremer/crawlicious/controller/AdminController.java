@@ -45,7 +45,7 @@ public class AdminController {
         modelAndView.addObject("users", lastUsers);
         modelAndView.setViewName("test");
 
-        mailService.send("stefan.remer@gmail.com", "foo", "hello world");
+//        mailService.send("stefan.remer@gmail.com", "foo", "hello world");
 
         return modelAndView;
     }

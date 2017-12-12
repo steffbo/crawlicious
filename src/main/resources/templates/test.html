@@ -12,6 +12,10 @@
         <p th:text="${user.name + ' ' + user.getRegistrationDate('dd.MM.yyyy')}"></p>
     </th:block>
 
+    <br>
+    Current URL: <span th:text="${#httpServletRequest.requestURI}"></span>
+    Query String: <span th:text="${#httpServletRequest.queryString}"></span>
+
 </div>
 
 </body>

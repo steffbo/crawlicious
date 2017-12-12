@@ -60,8 +60,7 @@ public class Posting implements Comparable<Posting> {
     }
 
     public Set<Tag> getTags() {
-        TreeSet treeSet = new TreeSet(tags);
-        return treeSet;
+        return new TreeSet(tags);
     }
 
     public void addTag(Tag tag) {

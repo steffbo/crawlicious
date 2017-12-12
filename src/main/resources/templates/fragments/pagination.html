@@ -6,6 +6,17 @@
 <div th:fragment='paginationbar'>
     <div>
         <ul class='pagination pagination-centered pagination-sm'>
+
+            <div class="dropdown" style="padding-right: 20px; float: left">
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Posts
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">10</a></li>
+                    <li><a href="#">25</a></li>
+                    <li><a href="#">50</a></li>
+                </ul>
+            </div>
+
             <li th:class="${page.firstPage}?'disabled':''">
                 <span th:if='${page.firstPage}'>← First</span>
                 <a th:if='${not page.firstPage}' th:href='@{${page.url}(page=0,size=${page.size})}'>← First</a>
@@ -31,6 +42,8 @@
                     →</a>
             </li>
         </ul>
+
+        <!-- TODO: add active filter tags -->
     </div>
 </div>
 

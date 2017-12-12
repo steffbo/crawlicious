@@ -26,6 +26,7 @@ public class SettingsController {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("settings");
+        modelAndView.addObject("user", userService.getCurrentUser());
         return modelAndView;
     }
 
