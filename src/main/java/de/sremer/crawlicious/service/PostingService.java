@@ -5,10 +5,13 @@ import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.PostingRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostingService {
@@ -31,6 +34,31 @@ public class PostingService {
 
     public Page<Posting> getPostingsPageByUser(User user, Pageable pageable) {
         return this.postingRepository.findByUser(user, pageable);
+    }
+
+    public Page<Posting> getPostingsPageByUserAndTags(User user, List<Tag> tags, Pageable pageable) {
+
+        List<Posting> postings = new ArrayList<>();
+        for (Tag tag : tags) {
+
+            List<Posting> byUserAndTag = this.postingRepository.findByUserAndTags(user.getId(), tag.getName());
+            for (Posting p : byUserAndTag) {
+                if (!postings.contains(p)) {
+                    postings.add(p);
+                }
+            }
+        }
+
+        long time = System.currentTimeMillis();
+        System.out.println("START");
+
+        List<Posting> collect = postings.stream()
+                .filter(p -> p.getTags().containsAll(tags))
+                .collect(Collectors.toList());
+
+        System.out.println("FINISH " + (System.currentTimeMillis() - time));
+
+        return new PageImpl<>(collect, pageable, collect.size());
     }
 
     public Posting getPostingById(long id) {
