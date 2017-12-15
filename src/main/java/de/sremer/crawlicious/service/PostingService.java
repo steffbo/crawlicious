@@ -37,7 +37,10 @@ public class PostingService {
 
     public Page<Posting> getPostingsPageByUserAndTags(User user, List<Tag> tags, Pageable pageable) {
 
-        List<String> tagList = tags.stream().map(Tag::getName).collect(Collectors.toList());
+        List<String> tagList = tags.stream()
+                .map(Tag::getName)
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
         List<Posting> byUserAndTag = this.postingRepository.findByUserAndTags(user.getId(), tagList);
         int pageNumber = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();

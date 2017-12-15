@@ -26,6 +26,7 @@ public class MyUtility {
         while (matcher.find()) {
             String tagString = matcher.group(0);
             if (!tagString.isEmpty()) {
+                tagString = tagString.trim();
                 tagList.add(tagService.getTagByName(tagString));
             }
         }

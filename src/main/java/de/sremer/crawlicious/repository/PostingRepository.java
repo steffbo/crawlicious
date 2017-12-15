@@ -25,7 +25,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
             "inner join user as u on p.user_id = u.user_id and u.user_id = :userId " +
             "inner join posting_tag as pt on p.posting_id = pt.post_id " +
             "inner join tag as t on pt.tag_id = t.tag_id " +
-            "where t.name in :tags " +
+            "where lower(t.name) in :tags " +
             ") as temp " +
             "GROUP BY temp.posting_id " +
             "having count(*) >= :#{#tags.size()}", nativeQuery = true)
