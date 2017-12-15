@@ -44,6 +44,7 @@ public class AdminController {
         Set<User> lastUsers = userService.listLastUsers(10);
         modelAndView.addObject("users", lastUsers);
         modelAndView.setViewName("test");
+        modelAndView.addObject("userService", userService);
 
 //        mailService.send("stefan.remer@gmail.com", "foo", "hello world");
 

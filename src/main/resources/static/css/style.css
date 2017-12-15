@@ -29,9 +29,19 @@ body {
 }
 
 .tag {
-    border: 1px solid green;
+    border: 1px dashed #cccccc;
     padding: 2px;
     border-radius: 6px;
+}
+
+.tag-active {
+    border: 1px solid red;
+    padding: 2px;
+    border-radius: 6px;
+}
+
+a.tag, a.tag-active {
+    color: darkorange;
 }
 
 .label.login {

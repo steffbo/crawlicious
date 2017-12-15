@@ -5,6 +5,7 @@ import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.service.PostingService;
 import de.sremer.crawlicious.service.TagService;
+import de.sremer.crawlicious.service.UrlService;
 import de.sremer.crawlicious.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +34,15 @@ public class ProfileController {
 
     private TagService tagService;
 
+    private UrlService urlService;
+
     @Autowired
-    public ProfileController(UserService userService, PostingService postingService, TagService tagService) {
+    public ProfileController(UserService userService, PostingService postingService, TagService tagService, UrlService urlService) {
 
         this.userService = userService;
         this.postingService = postingService;
         this.tagService = tagService;
+        this.urlService = urlService;
     }
 
     @RequestMapping(value = {"/profile"}, method = RequestMethod.GET)
@@ -46,13 +50,13 @@ public class ProfileController {
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
 
+        ModelAndView modelAndView = new ModelAndView();
+
         User user = userService.getCurrentUser();
         if (user != null) {
-            return profileById(user.getId(), page, size, "");
+            modelAndView.setViewName("redirect:/profile/" + user.getId());
         }
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
 
@@ -74,16 +78,20 @@ public class ProfileController {
             modelAndView.addObject("ownProfile", (user == ownUser));
 
             Page<Posting> postings;
+            String url = "/profile/" + user.getId();
 
             if (tags == null) {
                 postings = postingService.getPostingsPageByUser(user, pageable);
             } else {
                 List<Tag> tagsByName = tagService.getTagsByName(tags);
                 postings = postingService.getPostingsPageByUserAndTags(user, tagsByName, pageable);
+                url += "?tags=" + tags;
+                modelAndView.addObject("tags", tagsByName.stream().map(Tag::getName).toArray());
             }
-            PageWrapper<Posting> postingPageWrapper = new PageWrapper<>(postings, "/profile/" + user.getId());
+            PageWrapper<Posting> postingPageWrapper = new PageWrapper<>(postings, url);
             modelAndView.addObject("postings", postingPageWrapper.getContent());
             modelAndView.addObject("page", postingPageWrapper);
+            modelAndView.addObject("urlService", urlService);
             return modelAndView;
         } catch (EntityNotFoundException exception) {
             LOG.warn("Exception! " + exception.getMessage());

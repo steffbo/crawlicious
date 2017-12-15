@@ -14,13 +14,29 @@
         <button type="submit" class="btn btn-primary" onclick="location.href='/postings/csv_import'">CSV Import</button>
     </div>
 
-    <div th:replace="fragments/pagination :: paginationbar"></div>
-    <div style="border: 1px;">
-        <th:block th:each="posting : ${postings}">
-            <div th:replace="fragments/posting :: posting"></div>
-        </th:block>
+    <div th:if="${postings.size() > 0}">
+        <div th:replace="fragments/pagination :: paginationbar"></div>
+
+        <div th:if="${tags != null}">
+            Tags:
+            <th:block th:each="tag : ${tags}">
+                <a th:href="${urlService.getUrlWithoutTag(#httpServletRequest.getRequestURI(), tags, tag)}"
+                   th:text="${tag}" class="tag-active">Tag</a>
+            </th:block>
+        </div>
+
+        <div style="border: 1px;">
+            <th:block th:each="posting : ${postings}">
+                <div th:replace="fragments/posting :: posting"></div>
+            </th:block>
+        </div>
+        <div th:replace="fragments/pagination :: paginationbar"></div>
     </div>
-    <div th:replace="fragments/pagination :: paginationbar"></div>
+
+    <div th:if="${postings.size() == 0}">
+        no posts yet
+    </div>
+
 
 </div>
 

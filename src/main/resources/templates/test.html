@@ -14,7 +14,13 @@
 
     <br>
     Current URL: <span th:text="${#httpServletRequest.requestURI}"></span>
+    <br>
     Query String: <span th:text="${#httpServletRequest.queryString}"></span>
+
+
+    <br><br>
+
+    <span th:text="${userService.getCurrentUser().getName()}">false</span>
 
 </div>
 
