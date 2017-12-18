@@ -40,8 +40,12 @@ body {
     border-radius: 6px;
 }
 
+a.tag-delete {
+    color: green;
+}
+
 a.tag, a.tag-active {
-    color: darkorange;
+    color: #B30000;
 }
 
 .label.login {
@@ -55,4 +59,22 @@ a.tag, a.tag-active {
 
 .form-control[readonly], input[readonly] {
     background-color: white;
+}
+
+.left {
+    width: 60%;
+    float: left;
+}
+
+.right {
+    width: auto;
+    float: right;
+}
+
+.tag-atlas {
+    position: fixed;
+    top: 125px;
+    width: 30%;
+    right: 10%;
+    border: 1px solid black;
 }

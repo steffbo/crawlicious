@@ -6,17 +6,18 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container">
-    <h1>Profile of <span th:text="${user.name}"></span></h1>
-    User since <span th:text="${user.getRegistrationDate('dd MMM yyyy')}">Registration date</span>
+    <div class="left">
+        <h1>Profile of <span th:text="${user.name}"></span></h1>
+        User since <span th:text="${user.getRegistrationDate('dd MMM yyyy')}">Registration date</span>
 
-    <div th:if="${ownProfile}">
-        <button type="submit" class="btn btn-primary" onclick="location.href='/postings/insert'">New posting</button>
-        <button type="submit" class="btn btn-primary" onclick="location.href='/postings/csv_import'">CSV Import</button>
-    </div>
+        <div th:if="${ownProfile}">
+            <button type="submit" class="btn btn-primary" onclick="location.href='/postings/insert'">New posting
+            </button>
+            <button type="submit" class="btn btn-primary" onclick="location.href='/postings/csv_import'">CSV Import
+            </button>
+        </div>
 
-    <div th:if="${postings.size() > 0}">
-        <div th:replace="fragments/pagination :: paginationbar"></div>
-
+        <br>
         <div th:if="${tags != null}">
             Tags:
             <th:block th:each="tag : ${tags}">
@@ -25,18 +26,25 @@
             </th:block>
         </div>
 
-        <div style="border: 1px;">
-            <th:block th:each="posting : ${postings}">
-                <div th:replace="fragments/posting :: posting"></div>
-            </th:block>
+        <div th:if="${postings.size() > 0}">
+            <div th:replace="fragments/pagination :: paginationbar"></div>
+
+            <div style="border: 1px;">
+                <th:block th:each="posting : ${postings}">
+                    <div th:replace="fragments/posting :: posting"></div>
+                </th:block>
+            </div>
+            <div th:replace="fragments/pagination :: paginationbar"></div>
         </div>
-        <div th:replace="fragments/pagination :: paginationbar"></div>
+
+        <div th:if="${postings.size() == 0}">
+            no posts yet
+        </div>
     </div>
 
-    <div th:if="${postings.size() == 0}">
-        no posts yet
+    <div class="right">
+        <div th:if="${postings.size() > 0}" th:replace="fragments/tag_atlas :: tag-atlas"></div>
     </div>
-
 
 </div>
 

@@ -20,7 +20,9 @@
 
     <br><br>
 
-    <span th:text="${userService.getCurrentUser().getName()}">false</span>
+    <th:block th:each="tag : ${tags}">
+        <p th:text="${tag.name}"></p>
+    </th:block>
 
 </div>
 

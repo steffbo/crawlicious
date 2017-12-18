@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+
+<div th:fragment="tag-atlas" class="tag-atlas"
+     th:with="tagUrls=${urlService.getTagUrls(#httpServletRequest, allTags, relatedTags)}">
+    <th:block th:each="tagUrl : ${tagUrls}">
+        <a th:if="${tagUrl.showTag}"
+           th:href="${tagUrl.url}" th:text="${tagUrl.name}" th:class="${tagUrl.cssClass}">Tag</a>
+    </th:block>
+</div>
+
+</body>
+</html>

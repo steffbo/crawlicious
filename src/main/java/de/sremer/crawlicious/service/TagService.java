@@ -28,4 +28,12 @@ public class TagService {
         return tagRepository.findByNameIn(tags.split(" "));
     }
 
+    public List<Tag> getTagsByUserId(long userId) {
+        return tagRepository.findEverythingForUserId(userId);
+    }
+
+    public List<Tag> getRelatedTagsForTagByUserId(long userId, List<String> tags) {
+        return tagRepository.findPossibleForUserIdAndSelectedTag(userId, tags);
+    }
+
 }
