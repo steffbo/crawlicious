@@ -31,7 +31,7 @@ public class PostingServiceTest {
 
     @Before
     public void setup() {
-        postingService = new PostingService(postingRepository, tagService);
+        postingService = new PostingService();
     }
 
     @Test

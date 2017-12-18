@@ -35,8 +35,8 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
             "\tleft join tag t on pt.tag_id = t.tag_id\n" +
             "\tleft join user u on p.user_id = u.user_id\n" +
             "\twhere u.user_id = :userId\n" +
-            "\tand t.name in :tags\n" +
+            "\tand t.name = :tag\n" +
             ")", nativeQuery = true)
     List<Tag> findPossibleForUserIdAndSelectedTag(@Param(value = "userId") long userId,
-                                                  @Param(value = "tags") List<String> tags);
+                                                  @Param(value = "tag") String tag);
 }

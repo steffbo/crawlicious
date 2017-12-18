@@ -1,19 +1,26 @@
 package de.sremer.crawlicious.service;
 
+import de.sremer.crawlicious.model.Posting;
 import de.sremer.crawlicious.model.Tag;
+import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.TagRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TagService {
 
+    @Autowired
     private TagRepository tagRepository;
 
-    public TagService(TagRepository tagRepository) {
-        this.tagRepository = tagRepository;
-    }
+    @Autowired
+    private PostingService postingService;
 
     public Tag getTag(long id) {
         return this.tagRepository.findOne(id);
@@ -32,8 +39,13 @@ public class TagService {
         return tagRepository.findEverythingForUserId(userId);
     }
 
-    public List<Tag> getRelatedTagsForTagByUserId(long userId, List<String> tags) {
-        return tagRepository.findPossibleForUserIdAndSelectedTag(userId, tags);
+    public List<Tag> getRelatedTagsForTagByUserId(User user, List<Tag> tags) {
+
+        ArrayList<Tag> relatedTags = new ArrayList<>();
+        Pageable pageable = new PageRequest(0, 500);
+        Page<Posting> postingsPageByUserAndTags = postingService.getPostingsPageByUserAndTags(user, tags, pageable);
+        postingsPageByUserAndTags.getContent().forEach(p -> relatedTags.addAll(p.getTags()));
+        return relatedTags;
     }
 
 }

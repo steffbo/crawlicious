@@ -22,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ProfileController {
@@ -89,7 +88,7 @@ public class ProfileController {
                 url += "?tags=" + tags;
                 modelAndView.addObject("tags", tagsByName.stream().map(Tag::getName).toArray());
 
-                List<Tag> relatedTagsForTagByUserId = tagService.getRelatedTagsForTagByUserId(user.getId(), tagsByName.stream().map(Tag::getName).collect(Collectors.toList()));
+                List<Tag> relatedTagsForTagByUserId = tagService.getRelatedTagsForTagByUserId(user, tagsByName);
                 modelAndView.addObject("relatedTags", relatedTagsForTagByUserId);
             }
             PageWrapper<Posting> postingPageWrapper = new PageWrapper<>(postings, url);

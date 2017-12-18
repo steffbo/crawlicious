@@ -4,6 +4,7 @@ import de.sremer.crawlicious.model.Posting;
 import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.PostingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +16,10 @@ import java.util.stream.Collectors;
 @Service
 public class PostingService {
 
+    @Autowired
     private PostingRepository postingRepository;
+    @Autowired
     private TagService tagService;
-
-    public PostingService(PostingRepository postingRepository, TagService tagService) {
-        this.postingRepository = postingRepository;
-        this.tagService = tagService;
-    }
 
     public List<Posting> getPostings() {
         return this.postingRepository.findAll();
