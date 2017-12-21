@@ -12,7 +12,14 @@ public interface UserService {
 
     List<User> findUserByName(String name);
 
+    /**
+     * Actually create user.
+     *
+     * @param user
+     */
     void saveUser(User user);
+
+    void update(User user);
 
     User getOne(long id);
 

@@ -43,7 +43,9 @@
     </div>
 
     <div class="right">
-        <div th:if="${postings.size() > 0}" th:replace="fragments/tag_atlas :: tag-atlas"></div>
+        <div th:if="${postings.size() > 0}">
+            <div th:replace="fragments/tag_atlas :: tag-atlas"></div>
+        </div>
     </div>
 
 </div>

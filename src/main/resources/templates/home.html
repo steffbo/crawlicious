@@ -10,8 +10,10 @@
 
     <p>Last users</p>
     <th:block th:each="user : ${users}">
-        <a th:href="@{'/profile/' + ${user.id}}"><span th:text="${user.name}"></span></a>
-        member since: <span th:text="${user.getRegistrationDate('dd.MM.yyyy')}"></span><br>
+        <div th:if="${not user.privateProfile}">
+            <a th:href="@{'/profile/' + ${user.id}}" th:text="${user.name}">User</a>
+            member since: <span th:text="${user.getRegistrationDate('dd.MM.yyyy')}"></span><br>
+        </div>
     </th:block>
 
 </div>

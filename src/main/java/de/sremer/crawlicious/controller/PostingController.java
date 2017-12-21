@@ -41,13 +41,14 @@ public class PostingController {
     public ModelAndView insertPosting(
             @Validated @RequestParam(value = "title", required = true) String title,
             @Validated @RequestParam(value = "link", required = true) String link,
-            @RequestParam(value = "tags", required = true) String tags) {
+            @RequestParam(value = "tags", required = true) String tags,
+            @RequestParam(value = "secret", required = true) String secret) {
 
         UrlValidator urlValidator = new UrlValidator();
 
         if (urlValidator.isValid(link)) {
-
-            Posting posting = new Posting(title, link, MyUtility.parseTags(tagService, tags));
+            boolean isSecret = secret.equals("true");
+            Posting posting = new Posting(title, link, MyUtility.parseTags(tagService, tags), isSecret);
             User currentUser = userService.getCurrentUser();
             posting.setUser(currentUser);
             postingService.insertPosting(posting);
@@ -68,12 +69,14 @@ public class PostingController {
             @RequestParam(value = "id", required = true) String id,
             @RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "link", required = true) String link,
-            @RequestParam(value = "tags", required = true) String tags) {
+            @RequestParam(value = "tags", required = true) String tags,
+            @RequestParam(value = "secret", required = true) String secret) {
 
         Posting posting = postingService.getPostingById(Long.valueOf(id));
         posting.setTitle(title);
         posting.setLink(link);
         posting.setTags(MyUtility.parseTags(tagService, tags));
+        posting.setSecret(secret.equals("true"));
         postingService.updatePosting(posting);
 
         return new ModelAndView("redirect:/profile");
@@ -89,6 +92,7 @@ public class PostingController {
         modelAndView.addObject("title", posting.getTitle());
         modelAndView.addObject("link", posting.getLink());
         modelAndView.addObject("tags", MyUtility.getStringFromTags(posting.getTags()));
+        modelAndView.addObject("secret", posting.isSecret());
         modelAndView.setViewName("posting_update");
         return modelAndView;
     }

@@ -3,8 +3,9 @@
       xmlns:th="http://www.w3.org/1999/xhtml">
 <body>
 
-<div th:fragment="posting" class="posting">
+<div th:if="${not posting.secret or ownProfile}" th:fragment="posting" class="posting">
 
+    <span th:if="${posting.secret}">[secret]</span>
     <span class="postingtitle" th:text="${posting.title}">Posting title</span><br>
 
     <div th:if="${ownProfile}" style="float: right;">
@@ -12,29 +13,14 @@
         <a class="btn btn-danger" th:href="@{'/postings/delete/' + ${posting.id}}">Delete</a>
     </div>
 
-    <!--Current URL: <span th:text="${#httpServletRequest.requestURI}"></span>-->
-
-
     <a th:href="${posting.link}" target="_blank" th:text="${posting.getShortenedLink()}">Link</a>
     <div th:if="${not #lists.isEmpty(posting.tags)}"
          th:with="tagUrls=${urlService.getTagUrls(#httpServletRequest, posting.tags)}">
         <th:block th:each="tagUrl : ${tagUrls}">
             <a th:if="${tagUrl.showTag}"
                th:href="${tagUrl.url}" th:text="${tagUrl.name}" th:class="${tagUrl.cssClass}">Tag</a>
-            <!--<th:block th:each="tag : ${posting.tags}">-->
-            <!--<a th:if="${#httpServletRequest.queryString == null}" class="tag"-->
-            <!--th:text="${tag.name}"-->
-            <!--th:href="@{'?tags=' + ${tag.name}}"></a>-->
-            <!--<a th:if="@{${#httpServletRequest.queryString != null and not #strings.contains(#httpServletRequest.queryString, tag.name)}}"-->
-            <!--class="tag"-->
-            <!--th:text="${tag.name}"-->
-            <!--th:href="${urlService.getUrlForTag(#httpServletRequest.queryString, tag.name)}">Tag name</a>-->
-            <!--<span th:if="${#httpServletRequest.queryString != null and #strings.contains(#httpServletRequest.queryString, tag.name)}"-->
-            <!--class="tag"-->
-            <!--th:text="${tag.name}">Tag name</span>-->
         </th:block>
     </div>
-
 
 </div>
 

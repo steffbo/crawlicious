@@ -50,6 +50,10 @@ public class User implements Comparable<User> {
     @Setter
     private long registeredOn;
 
+    @Getter
+    @Setter
+    private boolean privateProfile;
+
     @ManyToMany
     @JoinTable(
             name = "user_role",

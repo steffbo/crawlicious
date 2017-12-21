@@ -9,10 +9,22 @@
 
     <h1>User settings</h1>
 
-    <a href="/settings/changepw">Change password</a>
+    <!--<a href="/settings/changepw">Change password</a>-->
 
     <br>
     My email: <span th:text="${user.email}"></span>
+
+    <div style="border: 1px solid black;">
+        Private profile?
+        <form method="post" action="settings/privateProfile">
+            <label class="checkbox-inline"><input type="radio" name="privateProfile" value="true"
+                                                  th:checked="${user.privateProfile}">Yes</label>
+            <label class="checkbox-inline"><input type="radio" name="privateProfile" value="false"
+                                                  th:checked="${not user.privateProfile}">No</label>
+            <br>
+            <button type="submit" value="Submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
 
 </div>
 

@@ -41,6 +41,10 @@ public class Posting implements Comparable<Posting> {
     @Setter
     private long date;
 
+    @Getter
+    @Setter
+    private boolean secret;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "posting_tag",
@@ -57,6 +61,11 @@ public class Posting implements Comparable<Posting> {
         this.title = title;
         this.link = link;
         this.tags = tags;
+    }
+
+    public Posting(String title, String link, Set<Tag> tags, boolean secret) {
+        this(title, link, tags);
+        this.secret = secret;
     }
 
     public Set<Tag> getTags() {

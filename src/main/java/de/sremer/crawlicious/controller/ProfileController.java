@@ -55,6 +55,8 @@ public class ProfileController {
         User user = userService.getCurrentUser();
         if (user != null) {
             modelAndView.setViewName("redirect:/profile/" + user.getId());
+        } else {
+            modelAndView.setViewName("redirect:/");
         }
 
         return modelAndView;
@@ -75,7 +77,11 @@ public class ProfileController {
                 return new ModelAndView("redirect:/");
             }
             modelAndView.addObject("user", user);
-            modelAndView.addObject("ownProfile", (user == ownUser));
+            boolean ownProfile = user == ownUser;
+            if (!ownProfile && user.isPrivateProfile()) {
+                return new ModelAndView("redirect:/");
+            }
+            modelAndView.addObject("ownProfile", ownProfile);
 
             Page<Posting> postings;
             String url = "/profile/" + user.getId();

@@ -2,7 +2,6 @@ package de.sremer.crawlicious.service;
 
 import de.sremer.crawlicious.model.PasswordResetToken;
 import de.sremer.crawlicious.model.Role;
-import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.PasswordRestTokenRepository;
 import de.sremer.crawlicious.repository.RoleRepository;
@@ -61,6 +60,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public void update(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
     public User getOne(long id) {
         return userRepository.getOne(id);
     }
@@ -115,14 +119,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public Page<User> listAllByPage(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
-
-    public Page<Tag> getAllTagsFromUser(Pageable pageable) {
-
-        if (pageable == null) {
-            pageable = new PageRequest(0, 20);
-        }
-        return null;
-    }
-
 
 }
