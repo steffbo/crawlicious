@@ -18,9 +18,9 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
 
     Page<Posting> findByUser(User user, Pageable pageable);
 
-    @Query(value = "SELECT temp.posting_id, temp.link, temp.title, temp.user_id, temp.date " +
+    @Query(value = "SELECT temp.posting_id, temp.link, temp.title, temp.user_id, temp.date, temp.secret " +
             "FROM (" +
-            "select p.posting_id, p.link, p.title, p.user_id, p.date " +
+            "select p.posting_id, p.link, p.title, p.user_id, p.date, p.secret " +
             "from posting as p " +
             "inner join user as u on p.user_id = u.user_id and u.user_id = :userId " +
             "inner join posting_tag as pt on p.posting_id = pt.post_id " +
