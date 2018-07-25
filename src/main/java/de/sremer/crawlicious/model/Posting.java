@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -85,6 +87,10 @@ public class Posting implements Comparable<Posting> {
     public String getShortenedLink() {
         int linkLimit = 80;
         return link.length() < linkLimit ? link : link.substring(0, linkLimit) + "...";
+    }
+
+    public String getPostingDate(String dateformat) {
+        return new SimpleDateFormat(dateformat).format(new Date(this.date));
     }
 
     @Override

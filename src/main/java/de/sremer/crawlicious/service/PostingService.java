@@ -53,11 +53,11 @@ public class PostingService {
     }
 
     public Posting getPostingById(long id) {
-        return this.postingRepository.findOne(id);
+        return this.postingRepository.findById(id).get();
     }
 
     public void deletePostingById(long id) {
-        this.postingRepository.delete(id);
+        this.postingRepository.deleteById(id);
     }
 
     public void updatePosting(Posting posting) {

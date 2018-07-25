@@ -23,7 +23,7 @@ public class TagService {
     private PostingService postingService;
 
     public Tag getTag(long id) {
-        return this.tagRepository.findOne(id);
+        return this.tagRepository.findById(id).get();
     }
 
     public Tag getTagByName(String tagName) {

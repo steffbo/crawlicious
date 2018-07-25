@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+      xmlns="http://www.w3.org/1999/xhtml">
 <body>
 
 <div th:if="${not posting.secret or ownProfile}" th:fragment="posting" class="posting">
 
     <span th:if="${posting.secret}">[secret]</span>
-    <span class="postingtitle" th:text="${posting.title}">Posting title</span><br>
+    <span class="postingtitle" th:text="${posting.title}"
+          th:title="${'posted on ' + posting.getPostingDate('dd.MM.yyyy')}">Posting title</span><br>
 
     <div th:if="${ownProfile}" style="float: right;">
         <a class="btn btn-info" th:href="@{'/postings/update/' + ${posting.id}}">Update</a>
