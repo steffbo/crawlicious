@@ -23,5 +23,6 @@ dist/
 nbdist/
 .nb-gradle/
 
-**/application.properties
+application.properties
+application-dev.properties
 buildNumber.properties

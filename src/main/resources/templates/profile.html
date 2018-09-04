@@ -10,6 +10,10 @@
         <h1>Profile of <span th:text="${user.name}"></span></h1>
         User since <span th:text="${user.getRegistrationDate('dd MMM yyyy')}">Registration date</span>
 
+        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            email: <span th:text="${user.email}"/>
+        </div>
+
         <div th:if="${ownProfile}">
             <button type="submit" class="btn btn-primary" onclick="location.href='/postings/insert'">New posting
             </button>

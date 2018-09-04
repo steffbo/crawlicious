@@ -31,7 +31,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         };
         viewResolver.setPrefix("/");
         viewResolver.setSuffix(".html");
-//        viewResolver.setTemplateMode("html5");
         return viewResolver;
     }
 }

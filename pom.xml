@@ -22,7 +22,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <vaadin.version>8.1.0</vaadin.version>
     </properties>
 
     <dependencies>
@@ -99,6 +98,7 @@
 
     </dependencies>
 
+    <!-- needed for version number -->
     <scm>
         <connection>scm:svn:http://127.0.0.1/dummy</connection>
         <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
@@ -157,30 +157,46 @@
             </plugin>
 
             <plugin>
-                <groupId>com.bazaarvoice.maven.plugins</groupId>
-                <artifactId>s3-upload-maven-plugin</artifactId>
-                <version>1.4</version>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <configuration>
+                    <target>
+                        <echo message="Pushing to Pi..."/>
+                        <sshexec host="192.168.1.190" username="pi" trust="true"
+                                 password="himbeere" failonerror="true"
+                                 command="mkdir -p /home/pi/test"
+                        />
+                        <scp trust="yes"
+                             file="target/crawlicious-0.1.${buildNumber}.jar"
+                             todir="pi:himbeere@192.168.1.190:/home/pi/woofles/woofles.jar"/>
+                    </target>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>s3upload</id>
+                        <id>scp</id>
                         <phase>install</phase>
                         <goals>
-                            <goal>s3-upload</goal>
+                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <bucketName>woofles</bucketName>
-                    <accessKey>${env.WOOFLES3ACCESSKEY}</accessKey>
-                    <secretKey>${env.WOOFLES3SECRETKEY}</secretKey>
-                    <endpoint>s3.eu-central-1.amazonaws.com</endpoint>
-                    <source>target/crawlicious-0.1.${buildNumber}.jar</source>
-                    <destination>woofles.jar</destination>
-                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jcraft</groupId>
+                        <artifactId>jsch</artifactId>
+                        <version>0.1.53</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-jsch</artifactId>
+                        <version>1.9.6</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
         </plugins>
         <finalName>${project.artifactId}-${project.version}.${buildNumber}</finalName>
+
     </build>
 
 

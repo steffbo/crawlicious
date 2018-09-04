@@ -1,6 +1,7 @@
 package de.sremer.crawlicious.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
+    @Qualifier("userService")
     private UserDetailsService userDetailsService;
 
     @Value("${spring.queries.users-query}")
@@ -29,6 +31,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${spring.queries.roles-query}")
     private String rolesQuery;
+
+    @Value("${server.port}")
+    private String port;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
@@ -41,8 +46,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.
-                addFilter(switchUserFilter())
+        if (port.equals("443")) {
+            http.requiresChannel().anyRequest().requiresSecure();
+        }
+
+        http.addFilter(switchUserFilter())
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
@@ -66,7 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web
                 .ignoring()
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
@@ -82,5 +90,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         filter.setExitUserUrl("/admin/switch/logout");
         return filter;
     }
-
 }
