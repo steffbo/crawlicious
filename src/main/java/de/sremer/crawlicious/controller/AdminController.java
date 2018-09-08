@@ -1,7 +1,6 @@
 package de.sremer.crawlicious.controller;
 
 import de.sremer.crawlicious.model.User;
-import de.sremer.crawlicious.service.TagService;
 import de.sremer.crawlicious.service.UserService;
 import de.sremer.crawlicious.service.mail.MailService;
 import org.slf4j.Logger;
@@ -26,9 +25,6 @@ public class AdminController {
     private UserService userService;
 
     @Autowired
-    private TagService tagService;
-
-    @Autowired
     @Qualifier("mailgunapi")
     private MailService mailService;
 
@@ -49,12 +45,6 @@ public class AdminController {
         modelAndView.addObject("users", lastUsers);
         modelAndView.setViewName("test");
         modelAndView.addObject("userService", userService);
-
-//        List<Tag> tagsByUserId = tagService.getRelatedTagsForTagByUserId(3, Arrays.asList("Weihnachten"));
-//        modelAndView.addObject("tags", tagsByUserId);
-
-//        mailService.send("stefan.remer@gmail.com", "foo", "hello world");
-
         return modelAndView;
     }
 
