@@ -87,7 +87,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
+            <version>1.18.2</version>
         </dependency>
 
         <dependency>
@@ -111,6 +111,19 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                        <configuration>
+                            <additionalProperties>
+                                <minor-version>${buildNumber}</minor-version>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -163,12 +176,18 @@
                     <target>
                         <echo message="Pushing to Pi..."/>
                         <sshexec host="192.168.1.190" username="pi" trust="true"
-                                 password="himbeere" failonerror="true"
-                                 command="mkdir -p /home/pi/test"
-                        />
+                                 password="himbeere" failonerror="false"
+                                 command="sudo mv /opt/woofles/logfile.log /opt/woofles/logfile_${buildNumber}.log"/>
                         <scp trust="yes"
                              file="target/crawlicious-0.1.${buildNumber}.jar"
                              todir="pi:himbeere@192.168.1.190:/home/pi/woofles/woofles.jar"/>
+                        <sshexec host="192.168.1.190" username="pi" trust="true"
+                                 password="himbeere" failonerror="true"
+                                 command="sudo mv /home/pi/woofles/woofles.jar /opt/woofles/woofles.jar"/>
+                        <sshexec host="192.168.1.190" username="pi" trust="true"
+                                 password="himbeere" failonerror="true"
+                                 timeout="60000"
+                                 command="sudo sh /home/pi/run.sh restart"/>
                     </target>
                 </configuration>
                 <executions>
