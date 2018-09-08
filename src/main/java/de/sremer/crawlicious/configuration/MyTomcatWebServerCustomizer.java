@@ -18,8 +18,8 @@ public class MyTomcatWebServerCustomizer implements WebServerFactoryCustomizer<T
 
     @Override
     public void customize(TomcatServletWebServerFactory factory) {
-        log.debug("tomcat customize");
         if (port.equals("443")) {
+            log.info("Adding Tomcat connector for HTTP over port 80");
             factory.addAdditionalTomcatConnectors(getHttpConnector());
         }
     }
