@@ -48,6 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         if (port.equals("443")) {
             http.requiresChannel().anyRequest().requiresSecure();
+            http.headers().httpStrictTransportSecurity().includeSubDomains(true).maxAgeInSeconds(0);
         }
 
         http.addFilter(switchUserFilter())
