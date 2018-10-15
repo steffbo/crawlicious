@@ -7,8 +7,10 @@
 
 <div class="container">
     <div class="left">
-        <h1>Profile of <span th:text="${user.name}"></span></h1>
-        User since <span th:text="${user.getRegistrationDate('dd MMM yyyy')}">Registration date</span>
+        <div>
+            <div><h1>Profile of <span th:text="${user.name}"></span></h1></div>
+            <div>User since <span th:text="${user.getRegistrationDate('dd MMM yyyy')}">Registration date</span></div>
+        </div>
 
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             email: <span th:text="${user.email}"/>
@@ -21,7 +23,6 @@
             </button>
         </div>
 
-        <br>
         <div th:if="${tags != null}">
             Tags:
             <th:block th:each="tag : ${tags}">
@@ -39,6 +40,7 @@
                 </th:block>
             </div>
             <div th:replace="fragments/pagination :: paginationbar"></div>
+            <br/><br/>
         </div>
 
         <div th:if="${postings.size() == 0}">
@@ -53,6 +55,8 @@
     </div>
 
 </div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
 
 </body>
 </html>
