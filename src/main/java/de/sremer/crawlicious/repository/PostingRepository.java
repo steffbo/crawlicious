@@ -28,6 +28,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
             "where lower(t.name) in :tags " +
             ") as temp " +
             "GROUP BY temp.posting_id " +
-            "having count(*) >= :#{#tags.size()}", nativeQuery = true)
+            "having count(*) >= :#{#tags.size()} " +
+            "ORDER BY temp.date desc", nativeQuery = true)
     List<Posting> findByUserAndTags(@Param(value = "userId") long userId, @Param(value = "tags") List<String> tags);
 }
