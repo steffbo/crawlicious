@@ -35,6 +35,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${server.port}")
     private String port;
 
+    @Value("${rememberme-key}")
+    private String rememberMeKey;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
@@ -51,7 +54,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             http.headers().httpStrictTransportSecurity().includeSubDomains(true).maxAgeInSeconds(0);
         }
 
-        http.addFilter(switchUserFilter())
+        http
+                .rememberMe().rememberMeCookieName("woofles-remember-me").tokenValiditySeconds(60 * 60 * 24 * 365).key(rememberMeKey)
+
+                .and()
+                .addFilter(switchUserFilter())
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
@@ -68,7 +75,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/profile")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .and().logout()
+
+                .and()
+                .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").and().exceptionHandling()
                 .accessDeniedPage("/access-denied");
