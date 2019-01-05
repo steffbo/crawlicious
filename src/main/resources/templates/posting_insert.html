@@ -1,9 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml">
-<head th:replace="fragments/template :: head"></head>
+<head th:replace="fragments/template :: head">
+
+</head>
 <body>
 <div th:replace="fragments/header :: header"></div>
+
+<script th:inline="javascript">
+    function getTags() {
+        var tags = [[${tags}]];
+        var result = [];
+        for (var i = 0; i < tags.length; i++) {
+            result.push({text: tags[i], value: tags[i]});
+        }
+        return result;
+    }
+
+    $(document).ready(function () {
+        $('#tags').selectize({
+            plugins: ['remove_button'],
+            delimiter: ',',
+            persist: false,
+            create: function (input) {
+                return {
+                    value: input,
+                    text: input
+                }
+            },
+            options: getTags()
+        });
+    });
+</script>
 
 <div class="container">
     <h1>New Posting</h1>
@@ -25,10 +53,8 @@
 
         <div class="form-group">
             <label>Tags
-                <input name="tags" id="tags" placeholder="put some tags here" class="form-control"/>
-                <span class="label label-info"
-                      data-toggle="tooltip" data-placement="bottom"
-                      title="Tags can be separated by a space or any of the following symbols: , ; ~ &">Info</span>
+                <input type="text" name="tags" id="tags" placeholder="enter tags" class="selectize-control"
+                       style="width: 200px;"/>
             </label>
         </div>
 

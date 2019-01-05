@@ -25,6 +25,13 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
             "where u.user_id = :userId order by t.name", nativeQuery = true)
     List<Tag> findEverythingForUserId(@Param(value = "userId") long userId);
 
+    @Query(value = "select DISTINCT t.name from tag as t\n" +
+            "join posting_tag as pt on t.tag_id = pt.tag_id\n" +
+            "join posting as p on pt.post_id = p.posting_id\n" +
+            "join user as u on p.user_id = u.user_id\n" +
+            "where u.user_id = :userId order by t.name", nativeQuery = true)
+    List<String> findAllTagNamesForUserId(@Param(value = "userId") long userId);
+
     @Query(value = "select DISTINCT t.name, t.tag_id\n" +
             "from tag t\n" +
             "left join posting_tag pt on t.tag_id = pt.tag_id\n" +

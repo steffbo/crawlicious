@@ -13,6 +13,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/postings")
 public class PostingController {
@@ -32,7 +34,9 @@ public class PostingController {
     public ModelAndView insertPosting() {
         ModelAndView modelAndView = new ModelAndView();
         User currentUser = userService.getCurrentUser();
+        List<String> tags = tagService.getTagNamesByUserId(currentUser.getId());
         modelAndView.addObject("user", currentUser);
+        modelAndView.addObject("tags", tags);
         modelAndView.setViewName("posting_insert");
         return modelAndView;
     }
@@ -58,6 +62,10 @@ public class PostingController {
             return profile;
         } else {
             ModelAndView insert = new ModelAndView("posting_insert");
+            User currentUser = userService.getCurrentUser();
+            List<String> tagNames = tagService.getTagNamesByUserId(currentUser.getId());
+            insert.addObject("user", currentUser);
+            insert.addObject("tags", tagNames);
             insert.addObject("linkError", "Provided link is invalid.");
             insert.addObject("oldLink", link);
             return insert;

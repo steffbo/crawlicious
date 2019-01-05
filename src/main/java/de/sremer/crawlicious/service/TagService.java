@@ -39,6 +39,10 @@ public class TagService {
         return tagRepository.findEverythingForUserId(userId);
     }
 
+    public List<String> getTagNamesByUserId(long userId) {
+        return tagRepository.findAllTagNamesForUserId(userId);
+    }
+
     public List<Tag> getRelatedTagsForTagByUserId(User user, List<Tag> tags) {
 
         ArrayList<Tag> relatedTags = new ArrayList<>();

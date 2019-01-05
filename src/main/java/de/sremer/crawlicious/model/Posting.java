@@ -2,10 +2,8 @@ package de.sremer.crawlicious.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
@@ -24,13 +22,10 @@ public class Posting implements Comparable<Posting> {
 
     @Getter
     @Setter
-    @NotNull(message = "Title is required")
     private String title;
 
     @Getter
     @Setter
-    @NotNull(message = "Link is required")
-    @URL(message = "Provided URL is invalid")
     private String link;
 
     @ManyToOne
