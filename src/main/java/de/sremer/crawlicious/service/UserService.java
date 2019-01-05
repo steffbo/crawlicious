@@ -105,7 +105,6 @@ public class UserService implements UserDetailsService {
     }
 
     public Set<User> listLastUsers(int amount) {
-
         Page<User> registeredOn = listAllByPage(new PageRequest(0, amount, new Sort(Sort.Direction.DESC, "registeredOn")));
         return new TreeSet<User>(registeredOn.getContent());
     }

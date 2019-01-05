@@ -14,6 +14,13 @@
 
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             email: <span th:text="${user.email}"/>
+
+            <div th:if="${ownProfile == false}">
+                <form action="/admin/switch/login" method="post">
+                    <input name="email" th:value="${user.email}" type="hidden"/>
+                    <button class="btn btn-primary" type="submit">Impersonate</button>
+                </form>
+            </div>
         </div>
 
         <div th:if="${ownProfile}">

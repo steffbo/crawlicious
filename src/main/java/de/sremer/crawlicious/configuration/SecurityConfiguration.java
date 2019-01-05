@@ -50,8 +50,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         if (port.equals("443")) {
-            http.requiresChannel().anyRequest().requiresSecure();
-            http.headers().httpStrictTransportSecurity().includeSubDomains(true).maxAgeInSeconds(0);
+            http
+                    .requiresChannel().anyRequest().requiresSecure()
+                    .and()
+                    .headers().httpStrictTransportSecurity().includeSubDomains(true).maxAgeInSeconds(0);
         }
 
         http
@@ -59,18 +61,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .addFilter(switchUserFilter())
+
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/profile/**").permitAll()
-                .antMatchers("/test").permitAll()
-                .antMatchers("/registration").permitAll()
-                .antMatchers("/password_reset").permitAll()
-                .antMatchers("/password_reset_token").permitAll()
+                .antMatchers("/", "/login", "/profile/**", "/test").permitAll()
+                .antMatchers("/registration", "/password_reset", "/password_reset_token").permitAll()
                 .antMatchers("/password_update").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest()
-                .authenticated().and().csrf().disable().formLogin()
+                .antMatchers("/admin/**").hasAnyRole("ADMIN", "PREVIOUS_ADMINISTRATOR")
+                .anyRequest().authenticated()
+
+                .and().csrf().disable()
+                .formLogin()
                 .loginPage("/login").failureUrl("/?login=error")
                 .defaultSuccessUrl("/profile")
                 .usernameParameter("email")
@@ -96,7 +96,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         filter.setUserDetailsService(userDetailsService);
         filter.setTargetUrl("/");
         filter.setSwitchUserUrl("/admin/switch/login");
-        filter.setUsernameParameter("username");
+        filter.setUsernameParameter("email");
         filter.setExitUserUrl("/admin/switch/logout");
         return filter;
     }

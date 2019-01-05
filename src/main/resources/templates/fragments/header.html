@@ -38,18 +38,22 @@
                     </a>
                 </li>
 
-                <li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                    <a href="/admin" th:href="@{/admin}">
+                <li sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/admin}">
                         <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>&nbsp;Admin
                     </a>
                 </li>
 
+                <li sec:authorize="hasRole('ROLE_PREVIOUS_ADMINISTRATOR')">
+                    <a th:href="@{/admin/switch/logout}">
+                        <span aria-hidden="true" class="glyphicon glyphicon-random"></span>&nbsp;!Impersonate
+                    </a>
+                </li>
+
                 <li sec:authorize="isAuthenticated()">
-                    <!--<span sec:authentication="name"></span>-->
                     <a href="/logout" th:href="@{/logout}"> <!--onclick="$('#form').submit();">-->
                         <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
                     </a>
-                    <!--<form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>-->
                 </li>
             </ul>
         </div>

@@ -13,6 +13,7 @@ public class Properties {
 
     public static String BUILD_VERSION;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     BuildProperties buildProperties;
 

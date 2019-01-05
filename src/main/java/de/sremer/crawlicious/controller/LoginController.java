@@ -127,4 +127,8 @@ public class LoginController {
         return new ModelAndView("/?error=invalid_token");
     }
 
+    @RequestMapping(value = "/access-denied")
+    public ModelAndView denied() {
+        return new ModelAndView("denied");
+    }
 }
