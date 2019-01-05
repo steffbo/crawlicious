@@ -45,6 +45,7 @@
                 </li>
 
                 <li sec:authorize="hasRole('ROLE_PREVIOUS_ADMINISTRATOR')">
+                    <span style="color: red;" th:text="${#authentication.getPrincipal().getUsername()}"></span>
                     <a th:href="@{/admin/switch/logout}">
                         <span aria-hidden="true" class="glyphicon glyphicon-random"></span>&nbsp;!Impersonate
                     </a>
