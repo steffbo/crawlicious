@@ -46,7 +46,7 @@ public class TagService {
     public List<Tag> getRelatedTagsForTagByUserId(User user, List<Tag> tags) {
 
         ArrayList<Tag> relatedTags = new ArrayList<>();
-        Pageable pageable = new PageRequest(0, 500);
+        Pageable pageable = PageRequest.of(0, 500);
         Page<Posting> postingsPageByUserAndTags = postingService.getPostingsPageByUserAndTags(user, tags, pageable);
         postingsPageByUserAndTags.getContent().forEach(p -> relatedTags.addAll(p.getTags()));
         return relatedTags;
