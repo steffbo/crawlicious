@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public class UrlService {
 
     public String getUrlForTag(String queryString, String tag) {
-
         if (queryString != null && queryString.contains("tags")) {
             if (queryString.contains(tag)) {
                 return null;
@@ -30,7 +29,6 @@ public class UrlService {
     }
 
     public String getUrlWithoutTag(String url, String[] tags, String tag) {
-
         if (tags == null) {
             return url;
         }
@@ -53,13 +51,11 @@ public class UrlService {
     }
 
     public List<TagUrl> getTagUrls(HttpServletRequest request, List<Tag> tagList, List<Tag> relatedTags) throws UnsupportedEncodingException {
-
         ArrayList<TagUrl> tagUrls = new ArrayList<>();
         String decodedQuery = request.getQueryString() != null ? URLDecoder.decode(request.getQueryString(), "UTF-8") : "";
         String[] requestTags = getTagsFromRequest(request);
 
         for (Tag tag : tagList) {
-
             String name = tag.getName();
 
             boolean isQueryNotNull = request.getQueryString() != null;
@@ -74,7 +70,6 @@ public class UrlService {
                 tagUrls.add(new TagUrl(name, "", "", false));
                 continue;
             }
-
             if (isTagInRelatedTags || !isRelatedTagsNotNull) {
                 if (isTagInQuery) {
                     tagUrls.add(new TagUrl(name, urlWithoutTag, "tag-delete", true));
@@ -83,14 +78,12 @@ public class UrlService {
                 tagUrls.add(new TagUrl(name, urlForTag, "tag", true));
                 continue;
             }
-
             tagUrls.add(new TagUrl(name, "?tags=" + name, "tag", true));
         }
         return tagUrls;
     }
 
     private String[] getTagsFromRequest(HttpServletRequest request) {
-
         if (request.getQueryString() == null || !request.getQueryString().contains("tags=")) {
             return null;
         }
