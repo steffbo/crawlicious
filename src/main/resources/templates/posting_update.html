@@ -4,6 +4,7 @@
 <head th:replace="fragments/template :: head"></head>
 <body>
 <div th:replace="fragments/header :: header"></div>
+<script th:replace="fragments/posting :: tags"></script>
 
 <div class="container">
     <h1>Update Posting</h1>
@@ -25,7 +26,9 @@
 
         <div class="form-group">
             <label>Tags
-                <input name="tags" id="tags" placeholder="Tags" class="form-control" th:value="${tags}"/>
+                <input type="text" name="tags" id="tags" placeholder="enter tags" class="selectize-control"
+                       style="width: 200px;"/>
+
                 <span class="label label-info"
                       data-toggle="tooltip" data-placement="bottom"
                       title="Tags can be separated by a space or any of the following symbols: , ; ~ &">Info</span>
@@ -47,7 +50,6 @@
         <br>
         <a class="btn btn-default" th:href="@{'/profile'}">Cancel</a>
         <button type="submit" value="Submit" class="btn btn-default">Submit</button>
-
 
     </form>
 

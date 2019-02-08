@@ -1,6 +1,7 @@
 package de.sremer.crawlicious.controller;
 
 import de.sremer.crawlicious.model.Posting;
+import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.service.PostingService;
 import de.sremer.crawlicious.service.TagService;
@@ -95,11 +96,13 @@ public class PostingController {
         ModelAndView modelAndView = new ModelAndView();
         User currentUser = userService.getCurrentUser();
         Posting posting = postingService.getPostingById(id);
+        List<String> tags = tagService.getTagNamesByUserId(currentUser.getId());
         modelAndView.addObject("user", currentUser);
         modelAndView.addObject("id", id);
         modelAndView.addObject("title", posting.getTitle());
         modelAndView.addObject("link", posting.getLink());
-        modelAndView.addObject("tags", MyUtility.getStringFromTags(posting.getTags()));
+        modelAndView.addObject("tags", tags);
+        modelAndView.addObject("postingTags", posting.getTags().stream().map(Tag::getName).toArray());
         modelAndView.addObject("secret", posting.isSecret());
         modelAndView.setViewName("posting_update");
         return modelAndView;

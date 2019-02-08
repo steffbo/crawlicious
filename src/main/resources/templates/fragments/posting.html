@@ -3,6 +3,39 @@
       xmlns="http://www.w3.org/1999/xhtml">
 <body>
 
+<script th:inline="javascript" th:fragment="tags">
+    function getTags() {
+        var tags = [[${tags}]];
+        var result = [];
+        for (var i = 0; i < tags.length; i++) {
+            result.push({text: tags[i], value: tags[i]});
+        }
+        return result;
+    }
+
+    $(document).ready(function () {
+        var postingTags = [[${postingTags}]];
+
+        var $select = $("#tags").selectize({
+            plugins: ['remove_button'],
+            delimiter: ',',
+            persist: false,
+            create: function (input) {
+                return {
+                    value: input,
+                    text: input
+                }
+            },
+            options: getTags()
+        });
+        var selectize = $select[0].selectize;
+
+        if (postingTags) {
+            selectize.setValue(postingTags);
+        }
+    });
+</script>
+
 <div th:if="${not posting.secret or ownProfile}" th:fragment="posting" class="posting">
 
     <span th:if="${posting.secret}">[secret]</span>

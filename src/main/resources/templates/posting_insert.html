@@ -6,32 +6,7 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
-
-<script th:inline="javascript">
-    function getTags() {
-        var tags = [[${tags}]];
-        var result = [];
-        for (var i = 0; i < tags.length; i++) {
-            result.push({text: tags[i], value: tags[i]});
-        }
-        return result;
-    }
-
-    $(document).ready(function () {
-        $('#tags').selectize({
-            plugins: ['remove_button'],
-            delimiter: ',',
-            persist: false,
-            create: function (input) {
-                return {
-                    value: input,
-                    text: input
-                }
-            },
-            options: getTags()
-        });
-    });
-</script>
+<script th:replace="fragments/posting :: tags"></script>
 
 <div class="container">
     <h1>New Posting</h1>
