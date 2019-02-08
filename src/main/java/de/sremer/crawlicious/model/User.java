@@ -3,8 +3,6 @@ package de.sremer.crawlicious.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
@@ -24,19 +22,15 @@ public class User implements Comparable<User> {
     @Setter
     private long id;
 
-    @NotEmpty(message = "*Please provide your name")
     @Getter
     @Setter
     private String name;
 
-    @Email(message = "*Please provide a valid Email")
-    @NotEmpty(message = "*Please provide an email")
     @NaturalId
     @Getter
     @Setter
     private String email;
 
-    @NotEmpty(message = "*Please provide your password")
     @Transient
     @Getter
     @Setter
@@ -64,7 +58,6 @@ public class User implements Comparable<User> {
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")
-    @Getter
     @Setter
     private Set<Posting> postings;
 
