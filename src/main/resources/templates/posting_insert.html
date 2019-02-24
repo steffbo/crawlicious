@@ -8,15 +8,49 @@
 <div th:replace="fragments/header :: header"></div>
 <script th:replace="fragments/posting :: tags"></script>
 
+<script type="application/javascript">
+    $(document).ready(function () {
+
+        var canClick = false;
+
+        function isUrlValid(url) {
+            return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+        }
+
+        var url = $("input[name='link']");
+
+        url.keyup(function (event) {
+            canClick = isUrlValid(url.val());
+        });
+
+        var resolveButton = $(".resolve");
+        var titleInput = $("input[name='title']");
+        resolveButton.click(function (event) {
+            if (!canClick) {
+                return;
+            }
+            $.ajax({
+                type: "get",
+                url: "/title/resolve",
+                data: {
+                    url: url.val()
+                },
+                success: function (response) {
+                    titleInput.val(response);
+                },
+                error: function (xhr) {
+                    console.log("error requesting the title");
+                    console.error(xhr);
+                }
+            });
+            event.preventDefault();
+        });
+    });
+</script>
+
 <div class="container">
     <h1>New Posting</h1>
     <form action="#" method="post">
-
-        <div class="form-group">
-            <label>Title
-                <input name="title" id="title" placeholder="Title" class="form-control" required/>
-            </label>
-        </div>
 
         <div class="form-group">
             <label>Link
@@ -24,6 +58,13 @@
                        class="form-control" th:value="${oldLink} ? ${oldLink} : ''"/>
             </label>
             <label class="validation-message" th:if="${linkError}" th:text="${linkError}"></label>
+            <a href="#" class="btn btn-success resolve">Load title</a>
+        </div>
+
+        <div class="form-group">
+            <label>Title
+                <input name="title" id="title" placeholder="Title" class="form-control" required/>
+            </label>
         </div>
 
         <div class="form-group">
