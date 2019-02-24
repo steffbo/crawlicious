@@ -32,9 +32,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${spring.queries.roles-query}")
     private String rolesQuery;
 
-    @Value("${server.port}")
-    private String port;
-
     @Value("${rememberme-key}")
     private String rememberMeKey;
 
@@ -48,14 +45,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        if (port.equals("443")) {
-            http
-                    .requiresChannel().anyRequest().requiresSecure()
-                    .and()
-                    .headers().httpStrictTransportSecurity().includeSubDomains(true).maxAgeInSeconds(0);
-        }
-
         http
                 .rememberMe().rememberMeCookieName("woofles-remember-me").tokenValiditySeconds(60 * 60 * 24 * 365).key(rememberMeKey)
 
