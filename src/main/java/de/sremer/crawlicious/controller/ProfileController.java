@@ -92,7 +92,6 @@ public class ProfileController {
                 postings = postingService.getPostingsPageByUser(user, pageable);
             } else {
                 List<Tag> tagsByName = tagService.getTagsByName(tags);
-                System.out.println("getpostingspagebyuserandtags ");
                 postings = postingService.getPostingsPageByUserAndTags(user, tagsByName, pageable);
                 url += "?tags=" + tags;
                 modelAndView.addObject("tags", tagsByName.stream().map(Tag::getName).toArray());

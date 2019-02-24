@@ -128,7 +128,6 @@ public class PostingController {
 
     @GetMapping(value = "/csv_import")
     public ModelAndView csvImportGet() {
-        System.out.println("foo");
         return new ModelAndView("csv_import");
     }
 

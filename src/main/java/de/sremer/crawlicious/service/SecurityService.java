@@ -47,7 +47,6 @@ public class SecurityService {
     }
 
     public User getUserForToken(String token) {
-        System.out.println("token = " + token);
         PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
         return passwordResetToken.getUser();
     }
