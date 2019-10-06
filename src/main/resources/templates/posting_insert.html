@@ -10,21 +10,25 @@
 
 <script type="application/javascript">
     $(document).ready(function () {
-
         var canClick = false;
+        var resolveButton = $(".resolve");
+        var titleInput = $("input[name='title']");
 
         function isUrlValid(url) {
-            return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+            return /^https?:\/\/([\w-]{2,}\.)+[a-zA-Z]{2,}(\/?).*/i.test(url);
         }
 
         var url = $("input[name='link']");
 
         url.keyup(function (event) {
             canClick = isUrlValid(url.val());
+            var remove = canClick ? "btn-danger" : "btn-success";
+            var add = canClick ? "btn-success" : "btn-danger";
+            console.log("remove: " + remove + ", add: " + add);
+            resolveButton.removeClass(remove).addClass(add);
+            resolveButton.prop("disabled", !canClick);
         });
 
-        var resolveButton = $(".resolve");
-        var titleInput = $("input[name='title']");
         resolveButton.click(function (event) {
             if (!canClick) {
                 return;
@@ -39,7 +43,7 @@
                     titleInput.val(response);
                 },
                 error: function (xhr) {
-                    console.log("error requesting the title");
+                    console.log("error requesting the title for " + url.val());
                     console.error(xhr);
                 }
             });
@@ -58,7 +62,7 @@
                        class="form-control" th:value="${oldLink} ? ${oldLink} : ''"/>
             </label>
             <label class="validation-message" th:if="${linkError}" th:text="${linkError}"></label>
-            <a href="#" class="btn btn-success resolve">Load title</a>
+            <a href="#" class="btn btn-danger resolve" readonly="true">Load title</a>
         </div>
 
         <div class="form-group">
@@ -90,5 +94,8 @@
     </form>
 
 </div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
 </body>
 </html>
