@@ -26,3 +26,5 @@ nbdist/
 application.properties
 application-dev.properties
 buildNumber.properties
+dump*.sql
+pi/
