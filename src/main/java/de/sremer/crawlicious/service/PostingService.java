@@ -4,6 +4,7 @@ import de.sremer.crawlicious.model.Posting;
 import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.PostingRepository;
+import de.sremer.crawlicious.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,10 +17,24 @@ import java.util.stream.Collectors;
 @Service
 public class PostingService {
 
-    @Autowired
     private PostingRepository postingRepository;
-    @Autowired
+    private UserRepository userRepository;
     private TagService tagService;
+
+    @Autowired
+    public void setPostingRepository(PostingRepository postingRepository) {
+        this.postingRepository = postingRepository;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setTagService(TagService tagService) {
+        this.tagService = tagService;
+    }
 
     public List<Posting> getPostings() {
         return this.postingRepository.findAll();
@@ -34,7 +49,6 @@ public class PostingService {
     }
 
     public Page<Posting> getPostingsPageByUserAndTags(User user, List<Tag> tags, Pageable pageable) {
-
         List<String> tagList = tags.stream()
                 .map(Tag::getName)
                 .map(String::toLowerCase)
@@ -46,7 +60,7 @@ public class PostingService {
 
         int from = pageNumber * pageSize;
         int to = from + pageSize;
-        to = to > count ? count : to;
+        to = Math.min(to, count);
         List<Posting> subList = byUserAndTag.subList(from, to);
 
         return new PageImpl<>(subList, pageable, count);
@@ -65,7 +79,6 @@ public class PostingService {
     }
 
     public void insertPosting(Posting posting) {
-
         posting.setDate(System.currentTimeMillis());
         this.postingRepository.save(posting);
     }
@@ -79,5 +92,11 @@ public class PostingService {
         Posting posting = postingRepository.getOne(postingId);
         Tag tag = tagService.getTag(tagId);
         posting.removeTag(tag);
+    }
+
+    public boolean linkAlreadyExists(Long userId, String url) {
+        User user = userRepository.findUserById(userId);
+        List<Posting> postings = postingRepository.findAllByUser(user);
+        return postings.stream().anyMatch(p -> p.getLink().contains(url) || url.contains(p.getLink()));
     }
 }

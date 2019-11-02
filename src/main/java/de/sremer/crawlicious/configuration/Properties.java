@@ -2,7 +2,6 @@ package de.sremer.crawlicious.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +13,13 @@ public class Properties {
     public static String BUILD_VERSION;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    BuildProperties buildProperties;
+    private final BuildProperties buildProperties;
 
-    public String getBuildVersion() {
+    public Properties(BuildProperties buildProperties) {
+        this.buildProperties = buildProperties;
+    }
+
+    private String getBuildVersion() {
         return buildProperties.getVersion() + "." + buildProperties.get("minor-version");
     }
 

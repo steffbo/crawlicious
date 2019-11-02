@@ -16,11 +16,18 @@ import java.util.List;
 @Service
 public class TagService {
 
-    @Autowired
     private TagRepository tagRepository;
+    private PostingService postingService;
 
     @Autowired
-    private PostingService postingService;
+    public void setTagRepository(TagRepository tagRepository) {
+        this.tagRepository = tagRepository;
+    }
+
+    @Autowired
+    public void setPostingService(PostingService postingService) {
+        this.postingService = postingService;
+    }
 
     public Tag getTag(long id) {
         return this.tagRepository.findById(id).get();

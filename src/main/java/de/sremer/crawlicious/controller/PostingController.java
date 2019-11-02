@@ -25,9 +25,17 @@ public class PostingController {
     private TagService tagService;
 
     @Autowired
-    PostingController(PostingService postingService, UserService userService, TagService tagService) {
+    public void setPostingService(PostingService postingService) {
         this.postingService = postingService;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setTagService(TagService tagService) {
         this.tagService = tagService;
     }
 
@@ -40,6 +48,14 @@ public class PostingController {
         modelAndView.addObject("tags", tags);
         modelAndView.setViewName("posting_insert");
         return modelAndView;
+    }
+
+    @GetMapping(value = "/exists")
+    public boolean linkAlreadyExists(@RequestParam(value = "id") Long id,
+                                     @RequestParam(value = "url") String url) {
+        System.out.println("id = " + id);
+        System.out.println("url = " + url);
+        return postingService.linkAlreadyExists(id, url);
     }
 
     @PostMapping(value = "/insert")
@@ -81,7 +97,7 @@ public class PostingController {
             @RequestParam(value = "tags", required = true) String tags,
             @RequestParam(value = "secret", required = true) String secret) {
 
-        Posting posting = postingService.getPostingById(Long.valueOf(id));
+        Posting posting = postingService.getPostingById(Long.parseLong(id));
         posting.setTitle(title);
         posting.setLink(link);
         posting.setTags(MyUtility.parseTags(tagService, tags));
@@ -113,7 +129,7 @@ public class PostingController {
             @RequestParam(value = "postingId", required = true) String postingId,
             @RequestParam(value = "tag", required = true) String tag) {
 
-        postingService.addTagToPosting(Long.valueOf(postingId), tag);
+        postingService.addTagToPosting(Long.parseLong(postingId), tag);
         return new ModelAndView("redirect:/profile");
     }
 
