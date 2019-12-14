@@ -188,9 +188,6 @@
                 <configuration>
                     <target>
                         <echo message="Pushing to Pi..."/>
-                        <sshexec host="192.168.1.190" username="pi" trust="true"
-                                 password="${env.REMOTE_PW}" failonerror="false"
-                                 command="sudo mv /opt/woofles/logfile.log /opt/woofles/logfile_${buildNumber}.log"/>
                         <scp trust="yes"
                              file="target/crawlicious-0.1.${buildNumber}.jar"
                              todir="pi:${env.REMOTE_PW}@192.168.1.190:/home/pi/woofles/woofles.jar"/>
@@ -199,7 +196,7 @@
                                  command="sudo mv /home/pi/woofles/woofles.jar /opt/woofles/woofles.jar"/>
                         <sshexec host="192.168.1.190" username="pi" trust="true"
                                  password="${env.REMOTE_PW}" failonerror="true"
-                                 command="sudo sh /home/pi/run restart woofles"/>
+                                 command="sudo /home/pi/run restart woofles"/>
                     </target>
                 </configuration>
                 <executions>
