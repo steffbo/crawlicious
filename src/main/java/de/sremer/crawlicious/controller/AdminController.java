@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,6 +37,21 @@ public class AdminController {
         modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
         modelAndView.setViewName("admin/home");
         return modelAndView;
+    }
+
+    @RequestMapping(value = {"/admin/users"}, method = RequestMethod.GET)
+    public ModelAndView adminUsers(HttpServletRequest request, Model model) {
+        ModelAndView modelAndView = new ModelAndView();
+        Set<User> lastUsers = userService.listLastUsers(20);
+        modelAndView.addObject("users", lastUsers);
+        modelAndView.setViewName("admin/users");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = {"/admin/users/delete/{id}"}, method = RequestMethod.GET)
+    public ModelAndView adminUsers(@PathVariable String id) {
+        userService.deleteUser(id);
+        return new ModelAndView("redirect:/admin/users");
     }
 
     @RequestMapping(value = {"/test"}, method = RequestMethod.GET)

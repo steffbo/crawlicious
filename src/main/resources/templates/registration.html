@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <form autocomplete="off" action="#" th:action="@{/registration}"
-                  th:object="${user}" method="post" class="form-horizontal"
+                  th:object="${user}" method="post" class="form-horizontal form"
                   role="form">
 
                 <h2>Registration Form</h2>
@@ -18,14 +18,14 @@
                         <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                                class="validation-message"></label>
                         <input type="text" th:field="*{name}" placeholder="Name"
-                               class="form-control" />
+                               class="form-control name" required/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-9">
                         <input type="email" th:field="*{email}" readonly onfocus="this.removeAttribute('readonly');"
-                               placeholder="E-Mail" class="form-control"/>
+                               placeholder="E-Mail" class="form-control email" required/>
                         <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
                             class="validation-message"></label>
                     </div>
@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <div class="col-sm-9">
                         <input type="password" th:field="*{password}"
-                               placeholder="Password" class="form-control"/>
+                               placeholder="Password" class="form-control password" required/>
                         <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
                             class="validation-message"></label>
                     </div>
@@ -42,7 +42,15 @@
 
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <button type="submit" class="btn btn-primary btn-block">Register User</button>
+                        <input type="text" class="check">
+                        <label class="random">Enter Random Number
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block submit">Register User</button>
                     </div>
                 </div>
 
@@ -52,6 +60,40 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    $(document).ready(function () {
+        var form = $(".form");
+        var name = $(".name");
+        var email = $(".email");
+        var password = $(".password");
+        var submitButton = $(".submit");
+        var checkInput = $(".check");
+        var randomLabel = $(".random");
+
+        var randomNumber = Math.floor(Math.random() * 101);
+        console.log("random" + randomNumber);
+
+        randomLabel.text("Enter Random Number " + randomNumber);
+
+        submitButton.click(function (event) {
+            event.preventDefault();
+
+            if (!name.val() || !email.val() || !password.val()) {
+                return false;
+            }
+
+            if (checkInput.val() === randomNumber.toString()) {
+                form.submit();
+                return;
+            }
+            console.log("wrong number");
+        });
+
+    });
+
+</script>
 
 </body>
 </html>

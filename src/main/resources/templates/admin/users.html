@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/template :: head"></head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+
+    <h1>Admin Users</h1>
+
+    <th:block th:each="user : ${users}">
+        <span th:text="${user.name + ' ' + user.getRegistrationDate('dd.MM.yyyy')}"></span>
+        <a th:href="@{|/admin/users/delete/${user.id}|}">X</a>
+        <br>
+    </th:block>
+
+</div>
+
+</body>
+</html>

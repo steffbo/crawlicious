@@ -99,4 +99,9 @@ public class PostingService {
         List<Posting> postings = postingRepository.findAllByUser(user);
         return postings.stream().anyMatch(p -> p.getLink().contains(url) || url.contains(p.getLink()));
     }
+
+    public void deleteAllPostingsByUser(User user) {
+        List<Posting> postingsByUser = getPostingsByUser(user);
+        postingRepository.deleteAll(postingsByUser);
+    }
 }

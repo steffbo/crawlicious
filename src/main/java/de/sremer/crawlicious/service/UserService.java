@@ -34,6 +34,9 @@ public class UserService implements UserDetailsService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private PostingService postingService;
+
+    @Autowired
     private PasswordRestTokenRepository passwordResetTokenRepository;
 
     @Autowired
@@ -126,4 +129,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll(pageable);
     }
 
+    public void deleteUser(String id) {
+        User user = getOne(Long.parseLong(id));
+        postingService.deleteAllPostingsByUser(user);
+        userRepository.delete(user);
+    }
 }
