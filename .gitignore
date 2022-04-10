@@ -28,3 +28,4 @@ application-dev.properties
 buildNumber.properties
 dump*.sql
 pi/
+logs/

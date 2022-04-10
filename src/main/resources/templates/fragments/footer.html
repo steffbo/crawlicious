@@ -5,7 +5,9 @@
 <body>
 
 <footer th:fragment="footer" class="footer">
-    &copy; 2018 nafesto | build <span th:text="${T(de.sremer.crawlicious.configuration.Properties).BUILD_VERSION}"/>
+    &copy; 2018 nafesto
+    | build <span th:text="${@buildVersion}"/>
+    | <a href="/imprint">Imprint</a>
 </footer>
 
 </body>

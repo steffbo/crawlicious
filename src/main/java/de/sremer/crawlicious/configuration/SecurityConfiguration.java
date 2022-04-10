@@ -53,6 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/profile/**", "/test").permitAll()
+                .antMatchers("/imprint").permitAll()
                 .antMatchers("/registration", "/password_reset", "/password_reset_token").permitAll()
                 .antMatchers("/password_update").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN", "PREVIOUS_ADMINISTRATOR")
