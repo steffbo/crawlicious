@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
 @DataJpaTest
 public class UserRepositoryTest {
 
@@ -26,17 +25,17 @@ public class UserRepositoryTest {
     @Test
     public void save() {
         User user = new User();
-        user.setEmail("stefan.remer@gmail.com");
-        user.setName("stefan");
+        user.setEmail("user@mail.com");
+        user.setName("user");
         user.setRegisteredOn(System.currentTimeMillis());
         user.setPassword("foo");
 
-        Role role = roleRepository.findRoleByRole("ADMIN_ROLE");
+        Role role = roleRepository.findRoleByRole("ROLE_ADMIN");
         user.addRole(role);
 
         userRepository.save(user);
 
-        List<User> users = userRepository.findUserByName("stefan");
+        List<User> users = userRepository.findUserByName("user");
         Assert.assertSame(user, users.get(0));
     }
 

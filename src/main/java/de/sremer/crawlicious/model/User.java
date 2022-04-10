@@ -7,9 +7,7 @@ import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -55,7 +53,7 @@ public class User implements Comparable<User> {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Getter
     @Setter
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @Setter

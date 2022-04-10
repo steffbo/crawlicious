@@ -9,13 +9,12 @@
 
     <h1>Admin</h1>
 
-    <a th:href="@{/test}">Test site</a>
+    <a th:href="@{/test}">Test site</a><br>
+    <a th:href="@{/admin/users}">See users</a>
 
-    <form action="/admin/switch/login" method="post">
-        <input name="email" type="text">
-        <input type="submit" class="btn btn-primary" value="Impersonate">
-    </form>
 </div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
 
 </body>
 </html>

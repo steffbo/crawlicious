@@ -21,7 +21,7 @@ public class RoleRepositoryTest {
     @Test
     public void findRoleByRole() {
 
-        Role admin = roleRepository.findRoleByRole("admin");
+        Role admin = roleRepository.findRoleByRole("ROLE_ADMIN");
         Assert.assertEquals(1, admin.getId());
     }
 
