@@ -2,17 +2,16 @@ package de.sremer.crawlicious.repository;
 
 import de.sremer.crawlicious.model.Role;
 import de.sremer.crawlicious.model.User;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import static org.junit.jupiter.api.Assertions.assertSame;
+
+@SpringBootTest
 @DataJpaTest
 public class UserRepositoryTest {
 
@@ -36,7 +35,7 @@ public class UserRepositoryTest {
         userRepository.save(user);
 
         List<User> users = userRepository.findUserByName("user");
-        Assert.assertSame(user, users.get(0));
+        assertSame(users.get(0), user);
     }
 
     @Test

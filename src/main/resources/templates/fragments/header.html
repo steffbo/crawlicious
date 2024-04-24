@@ -16,42 +16,42 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li sec:authorize="isAuthenticated()">
+                <li th:if="${!userRole.isEmpty()}">
                     <a href="#" th:href="@{/profile}">My profile</a>
                 </li>
-                <li sec:authorize="isAuthenticated()">
+                <li th:if="${!userRole.isEmpty()}">
                     <a href="#" th:href="@{/settings}">User settings</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li sec:authorize="!isAuthenticated()">
-                    <div th:replace="fragments/login :: login"></div>
+                <li th:if="${isUnknownUser}">
+                    <div th:replace="~{fragments/login :: login}"></div>
                 </li>
-                <li sec:authorize="!isAuthenticated()">
+                <li th:if="${isUnknownUser}">
                     <a href="/registration" th:href="@{/password_reset}">
                         <span class="glyphicon glyphicon-console" aria-hidden="true"></span>&nbsp;Reset password
                     </a>
                 </li>
-                <li sec:authorize="!isAuthenticated()">
+                <li th:if="${isUnknownUser}">
                     <a href="/registration" th:href="@{/registration}">
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Create account
                     </a>
                 </li>
 
-                <li sec:authorize="hasRole('ROLE_ADMIN')">
+                <li th:if="${isAdmin}">
                     <a th:href="@{/admin}">
                         <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>&nbsp;Admin
                     </a>
                 </li>
 
-                <li sec:authorize="hasRole('ROLE_PREVIOUS_ADMINISTRATOR')">
+                <li th:if="${isImpersonating}">
                     <span style="color: red;" th:text="${#authentication.getPrincipal().getUsername()}"></span>
                     <a th:href="@{/admin/switch/logout}">
                         <span aria-hidden="true" class="glyphicon glyphicon-random"></span>&nbsp;!Impersonate
                     </a>
                 </li>
 
-                <li sec:authorize="isAuthenticated()">
+                <li th:if="${isUser}">
                     <a href="/logout" th:href="@{/logout}"> <!--onclick="$('#form').submit();">-->
                         <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
                     </a>

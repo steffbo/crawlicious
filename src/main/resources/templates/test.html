@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/template :: head"></head>
+<head th:replace="~{fragments/template :: head}"></head>
 <body>
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 <div class="container">
 
     <h1>Test</h1>
@@ -11,14 +11,6 @@
     <th:block th:each="user : ${users}">
         <p th:text="${user.name + ' ' + user.getRegistrationDate('dd.MM.yyyy')}"></p>
     </th:block>
-
-    <br>
-    Current URL: <span th:text="${#httpServletRequest.requestURI}"></span>
-    <br>
-    Query String: <span th:text="${#httpServletRequest.queryString}"></span>
-
-
-    <br><br>
 
     <th:block th:each="tag : ${tags}">
         <p th:text="${tag.name}"></p>

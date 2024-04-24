@@ -5,57 +5,41 @@ import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.service.PostingService;
 import de.sremer.crawlicious.service.TagService;
-import de.sremer.crawlicious.service.UrlService;
 import de.sremer.crawlicious.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/profile")
+@RequiredArgsConstructor
+@Slf4j
 public class ProfileController {
 
-    static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
+    private final UserService userService;
+    private final PostingService postingService;
+    private final TagService tagService;
 
-    private UserService userService;
-
-    private PostingService postingService;
-
-    private TagService tagService;
-
-    private UrlService urlService;
-
-    @Autowired
-    public ProfileController(UserService userService, PostingService postingService, TagService tagService, UrlService urlService) {
-
-        this.userService = userService;
-        this.postingService = postingService;
-        this.tagService = tagService;
-        this.urlService = urlService;
-    }
-
-    @RequestMapping(value = {"/profile"}, method = RequestMethod.GET)
+    @GetMapping
     public ModelAndView profile(
+            HttpServletRequest request,
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
 
-        ModelAndView modelAndView = new ModelAndView();
+        var modelAndView = new UserModelAndView(userService);
 
         User user = userService.getCurrentUser();
         if (user != null) {
-            modelAndView.setViewName("redirect:/profile/" + user.getId());
+            return profileById(request, user.getId(), page, size, null);
         } else {
             modelAndView.setViewName("redirect:/");
         }
@@ -63,25 +47,28 @@ public class ProfileController {
         return modelAndView;
     }
 
-    @RequestMapping(value = {"/profile/{id}"}, method = RequestMethod.GET)
-    public ModelAndView profileById(@PathVariable(value = "id") long id,
+    @GetMapping("/{id}")
+    public ModelAndView profileById(HttpServletRequest request, @PathVariable(value = "id") long id,
                                     @RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                     @RequestParam(value = "size", required = false, defaultValue = "10") int size,
                                     @RequestParam(value = "tags", required = false) String tags) {
-        ModelAndView modelAndView = new ModelAndView("profile");
-        Sort sort = new Sort(Sort.Direction.DESC, "date");
+        var modelAndView = new UserModelAndView(userService);
+        modelAndView.setViewName("profile");
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
         Pageable pageable = PageRequest.of(page, size, sort);
 
         try {
             User user = userService.getOne(id);
             User ownUser = userService.getCurrentUser();
             if (user.getName().isEmpty()) {
-                return new ModelAndView("redirect:/");
+                modelAndView.setViewName("redirect:/");
+                return modelAndView;
             }
             modelAndView.addObject("user", user);
-            boolean ownProfile = user == ownUser;
+            boolean ownProfile = user.getEmail().equals(ownUser.getEmail());
             if (!ownProfile && user.isPrivateProfile()) {
-                return new ModelAndView("redirect:/");
+                modelAndView.setViewName("redirect:/");
+                return modelAndView;
             }
             modelAndView.addObject("ownProfile", ownProfile);
 
@@ -96,7 +83,7 @@ public class ProfileController {
                 url += "?tags=" + tags;
                 modelAndView.addObject("tags", tagsByName.stream().map(Tag::getName).toArray());
 
-                List<Tag> relatedTagsForTagByUserId = tagService.getRelatedTagsForTagByUserId(user, tagsByName);
+                List<Tag> relatedTagsForTagByUserId = postingService.getRelatedTagsForTagByUserId(user, tagsByName);
                 modelAndView.addObject("relatedTags", relatedTagsForTagByUserId);
             }
             PageWrapper<Posting> postingPageWrapper = new PageWrapper<>(postings, url);
@@ -106,12 +93,14 @@ public class ProfileController {
             List<Tag> tagsByUserId = tagService.getTagsByUserId(user.getId());
             modelAndView.addObject("allTags", tagsByUserId);
 
-            modelAndView.addObject("urlService", urlService);
+            modelAndView.addObject("request", request);
             return modelAndView;
         } catch (EntityNotFoundException exception) {
-            LOG.warn("Exception! " + exception.getMessage());
-            return new ModelAndView("redirect:/");
+            log.error("Exception! {}", exception.getMessage());
+            modelAndView.setViewName("redirect:/");
+            return modelAndView;
         }
     }
 
 }
+

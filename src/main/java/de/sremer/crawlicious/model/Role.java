@@ -3,28 +3,24 @@ package de.sremer.crawlicious.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "role")
 public class Role {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
-    @Getter
-    @Setter
     private long id;
 
     @Column(name = "role")
-    @Getter
-    @Setter
     private String role;
 
     @ManyToMany(mappedBy = "roles")
-    @Getter
-    @Setter
     private Set<User> users;
 
     public void addUser(User user) {

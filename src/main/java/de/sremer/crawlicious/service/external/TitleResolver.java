@@ -4,12 +4,12 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Service
-public class TitleResolverService {
+@Component
+public class TitleResolver {
 
     private String loadRemotePage(String url) {
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()

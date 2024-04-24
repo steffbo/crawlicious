@@ -6,7 +6,8 @@ import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.PasswordRestTokenRepository;
 import de.sremer.crawlicious.repository.RoleRepository;
 import de.sremer.crawlicious.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,62 +22,42 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service("userService")
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PostingService postingService;
+    private final PasswordRestTokenRepository passwordResetTokenRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PostingService postingService;
-
-    @Autowired
-    private PasswordRestTokenRepository passwordResetTokenRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    //    @Override
     public User findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
 
-    //    @Override
     public List<User> findUserByName(String name) {
         return userRepository.findUserByName(name);
     }
 
-    //    @Override
     public void saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRegisteredOn(System.currentTimeMillis());
         user.setEnabled(true);
         Role userRole = roleRepository.findRoleByRole("ROLE_USER");
-        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        user.setRoles(new HashSet<>(List.of(userRole)));
         userRepository.save(user);
     }
 
-    //    @Override
     public void update(User user) {
         userRepository.save(user);
     }
 
-    //    @Override
-    public User getOne(long id) {
-        return userRepository.getOne(id);
-    }
-
     @Transactional
-    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(email);
-        List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
-        return buildUserForAuthentication(user, authorities);
+    public User getOne(long id) {
+        return userRepository.findUserById(id);
     }
 
     @Override
@@ -88,13 +69,12 @@ public class UserService implements UserDetailsService {
     }
 
     private List<GrantedAuthority> getUserAuthority(Set<Role> userRoles) {
-        Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
+        Set<GrantedAuthority> roles = new HashSet<>();
         for (Role role : userRoles) {
             roles.add(new SimpleGrantedAuthority(role.getRole()));
         }
 
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>(roles);
-        return grantedAuthorities;
+        return new ArrayList<>(roles);
     }
 
     private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
@@ -108,23 +88,20 @@ public class UserService implements UserDetailsService {
     }
 
     public Set<User> listLastUsers(int amount) {
-        Page<User> registeredOn = listAllByPage(PageRequest.of(0, amount, new Sort(Sort.Direction.DESC, "registeredOn")));
-        return new TreeSet<User>(registeredOn.getContent());
+        Page<User> registeredOn = listAllByPage(PageRequest.of(0, amount, Sort.by(Sort.Direction.DESC, "registeredOn")));
+        return new TreeSet<>(registeredOn.getContent());
     }
 
-    //    @Override
     public void createPasswordResetTokenForUser(User user, String token) {
         PasswordResetToken myToken = new PasswordResetToken(token, user);
         passwordResetTokenRepository.save(myToken);
     }
 
-    //    @Override
     public void changeUserPassword(User user, String password) {
         user.setPassword(bCryptPasswordEncoder.encode(password));
         userRepository.save(user);
     }
 
-    //    @Override
     public Page<User> listAllByPage(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
@@ -133,5 +110,15 @@ public class UserService implements UserDetailsService {
         User user = getOne(Long.parseLong(id));
         postingService.deleteAllPostingsByUser(user);
         userRepository.delete(user);
+    }
+
+    public Optional<String> getHighestCurrentRole() {
+        if (getCurrentUser() == null) {
+            return Optional.empty();
+        }
+        return getCurrentUser().getRoles().stream()
+                .sorted()
+                .map(Role::getRole)
+                .findFirst();
     }
 }

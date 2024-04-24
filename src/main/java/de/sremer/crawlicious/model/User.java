@@ -1,66 +1,53 @@
 package de.sremer.crawlicious.model;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.Transient;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "user")
 public class User implements Comparable<User> {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    @Getter
-    @Setter
     private long id;
 
-    @Getter
-    @Setter
     private String name;
 
     @NaturalId
-    @Getter
-    @Setter
     private String email;
 
     @Transient
-    @Getter
-    @Setter
     private String password;
 
-    @Getter
-    @Setter
     private boolean enabled;
 
-    @Getter
-    @Setter
     private long registeredOn;
 
-    @Getter
-    @Setter
     private boolean privateProfile;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @Getter
-    @Setter
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    @Setter
+    @Getter(AccessLevel.NONE)
     private Set<Posting> postings;
 
     public Set<Posting> getPostings() {
-        TreeSet treeSet = new TreeSet(postings);
+        TreeSet<Posting> treeSet = new TreeSet(postings);
         return treeSet;
     }
 

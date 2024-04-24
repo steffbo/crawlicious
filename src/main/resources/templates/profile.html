@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns="http://www.w3.org/1999/xhtml">
-<head th:replace="fragments/template :: head"></head>
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/template :: head}"></head>
 <body>
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <div class="container">
     <div class="left">
@@ -12,7 +12,7 @@
             <div>User since <span th:text="${user.getRegistrationDate('dd MMM yyyy')}">Registration date</span></div>
         </div>
 
-        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
             email: <span th:text="${user.email}"/>
 
             <div th:if="${!ownProfile}">
@@ -33,20 +33,20 @@
         <div th:if="${tags != null}">
             Tags:
             <th:block th:each="tag : ${tags}">
-                <a th:href="${urlService.getUrlWithoutTag(#httpServletRequest.getRequestURI(), tags, tag)}"
+                <a th:href="${@urlHelper.getUrlWithoutTag(request.getRequestURI(), tags, tag)}"
                    th:text="${tag}" class="tag-active">Tag</a>
             </th:block>
         </div>
 
         <div th:if="${postings.size() > 0}">
-            <div th:replace="fragments/pagination :: paginationbar"></div>
+            <div th:replace="~{fragments/pagination :: paginationbar}"></div>
 
             <div style="border: 1px;">
                 <th:block th:each="posting : ${postings}">
-                    <div th:replace="fragments/posting :: posting"></div>
+                    <div th:replace="~{fragments/posting :: posting}"></div>
                 </th:block>
             </div>
-            <div th:replace="fragments/pagination :: paginationbar"></div>
+            <div th:replace="~{fragments/pagination :: paginationbar}"></div>
             <br/><br/>
         </div>
 
@@ -57,13 +57,13 @@
 
     <div class="right">
         <div th:if="${postings.size() > 0}">
-            <div th:replace="fragments/tag_atlas :: tag-atlas"></div>
+            <div th:replace="~{fragments/tag_atlas :: tag-atlas}"></div>
         </div>
     </div>
 
 </div>
 
-<footer th:replace="fragments/footer :: footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>

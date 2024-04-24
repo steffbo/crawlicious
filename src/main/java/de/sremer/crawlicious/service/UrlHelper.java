@@ -2,18 +2,18 @@ package de.sremer.crawlicious.service;
 
 import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.TagUrl;
-import org.springframework.stereotype.Service;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-public class UrlService {
+@Component
+public class UrlHelper {
 
     public String getUrlForTag(String queryString, String tag) {
         if (queryString != null && queryString.contains("tags")) {
@@ -46,13 +46,17 @@ public class UrlService {
         return request.getQueryString() != null && request.getQueryString().contains(tag);
     }
 
-    public List<TagUrl> getTagUrls(HttpServletRequest request, List<Tag> tagList) throws UnsupportedEncodingException {
+    public List<TagUrl> getTagUrls(HttpServletRequest request, List<Tag> tagList) {
         return getTagUrls(request, tagList, null);
     }
 
-    public List<TagUrl> getTagUrls(HttpServletRequest request, List<Tag> tagList, List<Tag> relatedTags) throws UnsupportedEncodingException {
+    public void test() {
+        System.out.println("foo");
+    }
+
+    public List<TagUrl> getTagUrls(HttpServletRequest request, List<Tag> tagList, List<Tag> relatedTags) {
         ArrayList<TagUrl> tagUrls = new ArrayList<>();
-        String decodedQuery = request.getQueryString() != null ? URLDecoder.decode(request.getQueryString(), "UTF-8") : "";
+        String decodedQuery = request.getQueryString() != null ? URLDecoder.decode(request.getQueryString(), StandardCharsets.UTF_8) : "";
         String[] requestTags = getTagsFromRequest(request);
 
         for (Tag tag : tagList) {

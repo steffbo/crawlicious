@@ -1,22 +1,20 @@
-package de.sremer.crawlicious.service.mail;
+package de.sremer.crawlicious.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Base64;
 
-@Component
-@Qualifier("mailgunapi")
-public class MailServiceMailgunApi implements MailService {
+@Service
+public class MailService {
 
     @Value("${mailgun.url}")
     private String url;

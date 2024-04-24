@@ -3,6 +3,7 @@ package de.sremer.crawlicious.service;
 import de.sremer.crawlicious.model.PasswordResetToken;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.PasswordRestTokenRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,10 +15,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 @Service
+@RequiredArgsConstructor
 public class SecurityService {
 
-    @Autowired
-    private PasswordRestTokenRepository passwordResetTokenRepository;
+    private final PasswordRestTokenRepository passwordResetTokenRepository;
 
     public String validatePasswordResetToken(String token) {
         PasswordResetToken passToken = passwordResetTokenRepository.findByToken(token);

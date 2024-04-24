@@ -1,17 +1,14 @@
 package de.sremer.crawlicious.repository;
 
 import de.sremer.crawlicious.model.Role;
-import de.sremer.crawlicious.model.User;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-@RunWith(SpringRunner.class)
+import static org.junit.jupiter.api.Assertions.assertSame;
+
 @SpringBootTest
 public class RoleRepositoryTest {
 
@@ -22,13 +19,13 @@ public class RoleRepositoryTest {
     public void findRoleByRole() {
 
         Role admin = roleRepository.findRoleByRole("ROLE_ADMIN");
-        Assert.assertEquals(1, admin.getId());
+        assertSame(1, admin.getId());
     }
 
     @Test
     public void findAll() {
         List<Role> all = roleRepository.findAll();
-        Assert.assertEquals(2, all.size());
+        assertSame(2, all.size());
     }
 
 }

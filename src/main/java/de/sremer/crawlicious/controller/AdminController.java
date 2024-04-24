@@ -2,36 +2,27 @@ package de.sremer.crawlicious.controller;
 
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.service.UserService;
-import de.sremer.crawlicious.service.mail.MailService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 
-@Controller
+@RestController
+@RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
-    static final Logger LOG = LoggerFactory.getLogger(AdminController.class);
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    @Qualifier("mailgunapi")
-    private MailService mailService;
-
-    @RequestMapping(value = {"/admin"}, method = RequestMethod.GET)
+    @GetMapping
     public ModelAndView adminHome() {
-        ModelAndView modelAndView = new ModelAndView();
+        var modelAndView = new UserModelAndView(userService);
         User currentUser = userService.getCurrentUser();
         modelAndView.addObject("userName", "Welcome " + currentUser.getName() + "!");
         modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
@@ -39,28 +30,27 @@ public class AdminController {
         return modelAndView;
     }
 
-    @RequestMapping(value = {"/admin/users"}, method = RequestMethod.GET)
+    @GetMapping("/users")
     public ModelAndView adminUsers(HttpServletRequest request, Model model) {
-        ModelAndView modelAndView = new ModelAndView();
+        var modelAndView = new UserModelAndView(userService);
         Set<User> lastUsers = userService.listLastUsers(20);
         modelAndView.addObject("users", lastUsers);
         modelAndView.setViewName("admin/users");
         return modelAndView;
     }
 
-    @RequestMapping(value = {"/admin/users/delete/{id}"}, method = RequestMethod.GET)
+    @GetMapping("/users/delete/{id}")
     public ModelAndView adminUsers(@PathVariable String id) {
         userService.deleteUser(id);
-        return new ModelAndView("redirect:/admin/users");
+        return new UserModelAndView(userService, "redirect:/admin/users");
     }
 
-    @RequestMapping(value = {"/test"}, method = RequestMethod.GET)
+    @GetMapping("/test")
     public ModelAndView test(HttpServletRequest request, Model model) {
-        ModelAndView modelAndView = new ModelAndView();
+        var modelAndView = new UserModelAndView(userService);
         Set<User> lastUsers = userService.listLastUsers(10);
         modelAndView.addObject("users", lastUsers);
         modelAndView.setViewName("test");
-        modelAndView.addObject("userService", userService);
         return modelAndView;
     }
 

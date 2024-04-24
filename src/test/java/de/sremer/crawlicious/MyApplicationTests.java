@@ -1,16 +1,17 @@
 package de.sremer.crawlicious;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.context.ApplicationContext;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@SpringBootTest()
 public class MyApplicationTests {
 
 	@Test
-	public void contextLoads() {
+	public void contextLoads(ApplicationContext applicationContext) {
+		assertNotNull(applicationContext);
 	}
 
 }

@@ -1,56 +1,38 @@
 package de.sremer.crawlicious.controller;
 
 import de.sremer.crawlicious.model.User;
+import de.sremer.crawlicious.service.MailService;
 import de.sremer.crawlicious.service.SecurityService;
 import de.sremer.crawlicious.service.UserService;
-import de.sremer.crawlicious.service.mail.MailService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import java.util.UUID;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 public class LoginController {
 
-    static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private SecurityService securityService;
-
-    @Autowired
-    @Qualifier("mailgunapi")
-    private MailService mailService;
-
-    @RequestMapping(value = {"/"})
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
-        modelAndView.addObject("users", userService.listLastUsers(10));
-        return modelAndView;
-    }
+    private final UserService userService;
+    private final SecurityService securityService;
+    private final MailService mailService;
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public ModelAndView login() {
-        ModelAndView modelAndView = new ModelAndView();
+        var modelAndView = new UserModelAndView(userService);
         modelAndView.setViewName("login");
         return modelAndView;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public ModelAndView registration() {
-        ModelAndView modelAndView = new ModelAndView();
+        var modelAndView = new UserModelAndView(userService);
 
         if (userService.getCurrentUser() == null) {
             User user = new User();
@@ -63,8 +45,9 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView("registration");
+    public ModelAndView createNewUser(@Validated User user, BindingResult bindingResult) {
+        var modelAndView = new UserModelAndView(userService);
+        modelAndView.setViewName("registration");
         User userExists = userService.findUserByEmail(user.getEmail());
         if (userExists != null) {
             bindingResult.rejectValue("email", "error.user",
@@ -73,21 +56,20 @@ public class LoginController {
         if (!bindingResult.hasErrors()) {
             userService.saveUser(user);
             modelAndView.addObject("successMessage", "User has been registered successfully");
-            modelAndView.setViewName("registration");
         }
         return modelAndView;
     }
 
     @RequestMapping(value = {"/password_reset"}, method = RequestMethod.GET)
     public ModelAndView passwordResetForm() {
-
-        ModelAndView modelAndView = new ModelAndView("password_reset");
+        var modelAndView = new UserModelAndView(userService);
+        modelAndView.setViewName("password_reset");
         return modelAndView;
     }
 
     @RequestMapping(value = {"/password_reset"}, method = RequestMethod.POST)
     public ModelAndView passwordResetSubmitted(String email) {
-
+        var modelAndView = new UserModelAndView(userService);
         User userExists = userService.findUserByEmail(email);
         if (userExists != null) {
             String token = UUID.randomUUID().toString();
@@ -96,39 +78,43 @@ public class LoginController {
                     "Woofl.es Password reset",
                     "Your password reset token: " + token + "\n" +
                             "https://woofl.es/password_reset_token?token=" + token);
-            ModelAndView modelAndView = new ModelAndView("password_reset_thanks");
-            return modelAndView;
+            modelAndView.setViewName("password_reset_thanks");
         } else {
-            ModelAndView modelAndView = new ModelAndView("password_reset");
+            modelAndView.setViewName("password_reset");
             modelAndView.addObject("emaildoesnotexist", true);
-            return modelAndView;
         }
+        return modelAndView;
     }
 
     @RequestMapping(value = {"/password_reset_token"}, method = RequestMethod.GET)
     public ModelAndView resetPasswordToken(@RequestParam String token) {
         String result = securityService.validatePasswordResetToken(token);
+        var modelAndView = new UserModelAndView(userService);
         if (result.equals("valid")) {
-            ModelAndView modelAndView = new ModelAndView("password_update");
+            modelAndView.setViewName("password_update");
             modelAndView.addObject("token", token);
             return modelAndView;
         }
-        return new ModelAndView("password_reset");
+        modelAndView.setViewName("password_reset");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/password_update", method = RequestMethod.POST)
     public ModelAndView savePassword(String token, String password) {
+        var modelAndView = new UserModelAndView(userService);
         User user = securityService.getUserForToken(token);
         securityService.invalidateToken(token);
         if (user != null) {
             userService.changeUserPassword(user, password);
-            return new ModelAndView("redirect:/");
+            modelAndView.setViewName("redirect:/");
+            return modelAndView;
         }
-        return new ModelAndView("/?error=invalid_token");
+        modelAndView.setViewName("/?error=invalid_token");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/access-denied")
     public ModelAndView denied() {
-        return new ModelAndView("denied");
+        return new UserModelAndView(userService, "denied");
     }
 }

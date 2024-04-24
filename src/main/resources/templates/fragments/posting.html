@@ -49,7 +49,7 @@
 
     <a th:href="${posting.link}" target="_blank" th:text="${posting.getShortenedLink()}">Link</a>
     <div th:if="${not #lists.isEmpty(posting.tags)}"
-         th:with="tagUrls=${urlService.getTagUrls(#httpServletRequest, posting.tags)}">
+         th:with="tagUrls=${@urlHelper.getTagUrls(request, posting.tags)}">
         <th:block th:each="tagUrl : ${tagUrls}">
             <a th:if="${tagUrl.showTag}"
                th:href="${tagUrl.url}" th:text="${tagUrl.name}" th:class="${tagUrl.cssClass}">Tag</a>

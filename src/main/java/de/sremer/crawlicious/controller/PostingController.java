@@ -7,8 +7,8 @@ import de.sremer.crawlicious.service.PostingService;
 import de.sremer.crawlicious.service.TagService;
 import de.sremer.crawlicious.service.UserService;
 import de.sremer.crawlicious.util.MyUtility;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,30 +18,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/postings")
+@RequiredArgsConstructor
 public class PostingController {
 
-    private PostingService postingService;
-    private UserService userService;
-    private TagService tagService;
-
-    @Autowired
-    public void setPostingService(PostingService postingService) {
-        this.postingService = postingService;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setTagService(TagService tagService) {
-        this.tagService = tagService;
-    }
+    private final PostingService postingService;
+    private final UserService userService;
+    private final TagService tagService;
 
     @GetMapping(value = "/insert")
     public ModelAndView insertPosting() {
-        ModelAndView modelAndView = new ModelAndView();
+        var modelAndView = new UserModelAndView(userService);
         User currentUser = userService.getCurrentUser();
         List<String> tags = tagService.getTagNamesByUserId(currentUser.getId());
         modelAndView.addObject("user", currentUser);
@@ -74,11 +60,11 @@ public class PostingController {
             posting.setUser(currentUser);
             postingService.insertPosting(posting);
 
-            ModelAndView profile = new ModelAndView("redirect:/profile");
+            var profile = new UserModelAndView(userService, "redirect:/profile");
             profile.addObject("user", currentUser);
             return profile;
         } else {
-            ModelAndView insert = new ModelAndView("posting_insert");
+            var insert = new UserModelAndView(userService, "posting_insert");
             User currentUser = userService.getCurrentUser();
             List<String> tagNames = tagService.getTagNamesByUserId(currentUser.getId());
             insert.addObject("user", currentUser);
@@ -104,12 +90,12 @@ public class PostingController {
         posting.setSecret(secret.equals("true"));
         postingService.updatePosting(posting);
 
-        return new ModelAndView("redirect:/profile");
+        return new UserModelAndView(userService, "redirect:/profile");
     }
 
     @GetMapping(value = "/update/{id}")
     public ModelAndView updatePosting(@PathVariable("id") int id) {
-        ModelAndView modelAndView = new ModelAndView();
+        var modelAndView = new UserModelAndView(userService);
         User currentUser = userService.getCurrentUser();
         Posting posting = postingService.getPostingById(id);
         List<String> tags = tagService.getTagNamesByUserId(currentUser.getId());
@@ -130,7 +116,7 @@ public class PostingController {
             @RequestParam(value = "tag", required = true) String tag) {
 
         postingService.addTagToPosting(Long.parseLong(postingId), tag);
-        return new ModelAndView("redirect:/profile");
+        return new UserModelAndView(userService, "redirect:/profile");
     }
 
     @PostMapping(value = "/update/tag/remove/")
@@ -139,12 +125,12 @@ public class PostingController {
             @RequestParam(value = "tagId", required = true) String tagId) {
 
         postingService.removeTagFromPosting(Long.valueOf(postingId), Long.valueOf(tagId));
-        return new ModelAndView("redirect:/profile");
+        return new UserModelAndView(userService, "redirect:/profile");
     }
 
     @GetMapping(value = "/csv_import")
     public ModelAndView csvImportGet() {
-        return new ModelAndView("csv_import");
+        return new UserModelAndView(userService, "csv_import");
     }
 
     @PostMapping(value = "/csv_import")
@@ -162,8 +148,7 @@ public class PostingController {
             postingService.insertPosting(posting);
         }
 
-        ModelAndView profile = new ModelAndView("redirect:/profile");
-        return profile;
+        return new UserModelAndView(userService, "redirect:/profile");
     }
 
     @GetMapping(value = "/{id}")
@@ -173,9 +158,8 @@ public class PostingController {
 
     @GetMapping(value = "/delete/{id}")
     public ModelAndView deletePostingById(@PathVariable("id") int id) {
-
         postingService.deletePostingById(id);
-        return new ModelAndView("redirect:/profile");
+        return new UserModelAndView(userService, "redirect:/profile");
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)

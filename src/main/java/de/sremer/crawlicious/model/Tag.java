@@ -1,37 +1,32 @@
 package de.sremer.crawlicious.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "tag")
 public class Tag implements Comparable<Tag> {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tag_id")
-    @Getter
-    @Setter
     private long id;
 
     @NaturalId
-    @Getter
-    @Setter
     private String name;
 
     @ManyToMany(mappedBy = "tags")
-    @Getter
-    @Setter
     private List<Posting> posts = new ArrayList<>();
-
-    public Tag() {
-    }
 
     public Tag(String name) {
         this.name = name;

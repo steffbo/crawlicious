@@ -1,45 +1,38 @@
 package de.sremer.crawlicious.model;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
 
+@NoArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "posting")
 public class Posting implements Comparable<Posting> {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "posting_id")
-    @Getter
-    @Setter
     private long id;
 
-    @Getter
-    @Setter
     private String title;
 
-    @Getter
-    @Setter
     private String link;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @Getter
-    @Setter
     private User user;
 
-    @Getter
-    @Setter
     private long date;
 
-    @Getter
-    @Setter
     private boolean secret;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
@@ -47,11 +40,8 @@ public class Posting implements Comparable<Posting> {
             name = "posting_tag",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    @Setter
+    @Getter(AccessLevel.NONE)
     private Set<Tag> tags;
-
-    public Posting() {
-    }
 
     public Posting(String title, String link, Set<Tag> tags) {
         this.title = title;
@@ -65,7 +55,7 @@ public class Posting implements Comparable<Posting> {
     }
 
     public Set<Tag> getTags() {
-        return new TreeSet(tags);
+        return new TreeSet<>(tags);
     }
 
     public void addTag(Tag tag) {

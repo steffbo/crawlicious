@@ -5,36 +5,25 @@ import de.sremer.crawlicious.model.Tag;
 import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.PostingRepository;
 import de.sremer.crawlicious.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PostingService {
 
-    private PostingRepository postingRepository;
-    private UserRepository userRepository;
-    private TagService tagService;
-
-    @Autowired
-    public void setPostingRepository(PostingRepository postingRepository) {
-        this.postingRepository = postingRepository;
-    }
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setTagService(TagService tagService) {
-        this.tagService = tagService;
-    }
+    private final PostingRepository postingRepository;
+    private final UserRepository userRepository;
+    private final TagService tagService;
 
     public List<Posting> getPostings() {
         return this.postingRepository.findAll();
@@ -103,5 +92,13 @@ public class PostingService {
     public void deleteAllPostingsByUser(User user) {
         List<Posting> postingsByUser = getPostingsByUser(user);
         postingRepository.deleteAll(postingsByUser);
+    }
+
+    public List<Tag> getRelatedTagsForTagByUserId(User user, List<Tag> tags) {
+        ArrayList<Tag> relatedTags = new ArrayList<>();
+        Pageable pageable = PageRequest.of(0, 500);
+        Page<Posting> postingsPageByUserAndTags = getPostingsPageByUserAndTags(user, tags, pageable);
+        postingsPageByUserAndTags.getContent().forEach(p -> relatedTags.addAll(p.getTags()));
+        return relatedTags;
     }
 }

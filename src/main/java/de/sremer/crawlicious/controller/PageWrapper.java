@@ -7,15 +7,15 @@ import java.util.List;
 
 public class PageWrapper<T> {
     public static final int MAX_PAGE_ITEM_DISPLAY = 10;
-    private Page<T> page;
-    private List<PageItem> items;
-    private int currentNumber;
+    private final Page<T> page;
+    private final List<PageItem> items;
+    private final int currentNumber;
     private String url;
 
     public PageWrapper(Page<T> page, String url) {
         this.page = page;
         this.url = url;
-        items = new ArrayList<PageItem>();
+        items = new ArrayList<>();
 
         currentNumber = page.getNumber() + 1; //start from 1 to match page.page
 
@@ -85,21 +85,6 @@ public class PageWrapper<T> {
         return page.hasNext();
     }
 
-    public class PageItem {
-        private int number;
-        private boolean current;
-
-        public PageItem(int number, boolean current) {
-            this.number = number;
-            this.current = current;
-        }
-
-        public int getNumber() {
-            return this.number;
-        }
-
-        public boolean isCurrent() {
-            return this.current;
-        }
+    public record PageItem(int number, boolean current) {
     }
 }
