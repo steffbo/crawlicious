@@ -6,7 +6,6 @@ import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.repository.PostingRepository;
 import de.sremer.crawlicious.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +23,6 @@ public class PostingService {
     private final PostingRepository postingRepository;
     private final UserRepository userRepository;
     private final TagService tagService;
-
-    public List<Posting> getPostings() {
-        return this.postingRepository.findAll();
-    }
 
     public List<Posting> getPostingsByUser(User user) {
         return this.postingRepository.findAllByUser(user);

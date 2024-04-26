@@ -1,11 +1,11 @@
 package de.sremer.crawlicious.model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
-import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

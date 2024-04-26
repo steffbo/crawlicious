@@ -33,7 +33,4 @@ public class TagService {
     public List<String> getTagNamesByUserId(long userId) {
         return tagRepository.findAllTagNamesForUserId(userId);
     }
-
-
-
 }

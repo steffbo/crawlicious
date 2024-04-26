@@ -1,5 +1,6 @@
 package de.sremer.crawlicious.service.external;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class TitleResolver {
 
     private String loadRemotePage(String url) {
@@ -26,6 +28,7 @@ public class TitleResolver {
             }
             return response.body().string();
         } catch (IOException e) {
+            log.warn("Could not resolve title for {}", url, e);
             return null;
         }
     }

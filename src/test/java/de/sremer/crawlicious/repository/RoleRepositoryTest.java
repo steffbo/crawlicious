@@ -1,15 +1,19 @@
 package de.sremer.crawlicious.repository;
 
+import de.sremer.crawlicious.ContainersConfig;
 import de.sremer.crawlicious.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 @SpringBootTest
+@Import(ContainersConfig.class)
 public class RoleRepositoryTest {
 
     @Autowired
@@ -17,9 +21,8 @@ public class RoleRepositoryTest {
 
     @Test
     public void findRoleByRole() {
-
         Role admin = roleRepository.findRoleByRole("ROLE_ADMIN");
-        assertSame(1, admin.getId());
+        assertSame(1L, admin.getId());
     }
 
     @Test

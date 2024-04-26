@@ -1,14 +1,17 @@
 package de.sremer.crawlicious.model;
 
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.Transient;
 
-import jakarta.persistence.*;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Getter
@@ -57,12 +60,6 @@ public class User implements Comparable<User> {
 
     public void addRole(Role role) {
         this.roles.add(role);
-        role.addUser(this);
-    }
-
-    public void removeRole(Role role) {
-        this.roles.remove(role);
-        role.removeUser(this);
     }
 
     @Override

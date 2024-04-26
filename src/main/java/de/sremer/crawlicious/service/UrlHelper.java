@@ -42,16 +42,8 @@ public class UrlHelper {
         }
     }
 
-    public boolean isTagInQuery(HttpServletRequest request, String tag) {
-        return request.getQueryString() != null && request.getQueryString().contains(tag);
-    }
-
     public List<TagUrl> getTagUrls(HttpServletRequest request, List<Tag> tagList) {
         return getTagUrls(request, tagList, null);
-    }
-
-    public void test() {
-        System.out.println("foo");
     }
 
     public List<TagUrl> getTagUrls(HttpServletRequest request, List<Tag> tagList, List<Tag> relatedTags) {
