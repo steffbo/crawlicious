@@ -56,6 +56,8 @@
         <appender-ref ref="FILE-WOOFLES"/>
     </logger>
 
+    <logger name="org.springframework.cloud.vault.config" level="DEBUG"/>
+
     <logger name="*" level="ERROR">
         <appender-ref ref="FILE-ERROR"/>
     </logger>

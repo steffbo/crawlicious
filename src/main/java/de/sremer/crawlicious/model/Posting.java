@@ -68,6 +68,15 @@ public class Posting implements Comparable<Posting> {
         tag.getPosts().remove(this);
     }
 
+    public String getShortenedLink() {
+        int linkLimit = 80;
+        return link.length() < linkLimit ? link : link.substring(0, linkLimit) + "...";
+    }
+
+    public String getPostingDate(String dateformat) {
+        return new SimpleDateFormat(dateformat).format(new Date(this.date));
+    }
+
     @Override
     public boolean equals(Object o) {
         return this == o || o instanceof Posting && id == ((Posting) o).id;

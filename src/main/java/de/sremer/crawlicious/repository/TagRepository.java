@@ -20,14 +20,14 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     @Query(value = "select DISTINCT t.name, t.tag_id from tag as t\n" +
             "join posting_tag as pt on t.tag_id = pt.tag_id\n" +
             "join posting as p on pt.post_id = p.posting_id\n" +
-            "join user as u on p.user_id = u.user_id\n" +
+            "join userdata as u on p.user_id = u.user_id\n" +
             "where u.user_id = :userId order by t.name", nativeQuery = true)
     List<Tag> findEverythingForUserId(@Param(value = "userId") long userId);
 
     @Query(value = "select DISTINCT t.name from tag as t\n" +
             "join posting_tag as pt on t.tag_id = pt.tag_id\n" +
             "join posting as p on pt.post_id = p.posting_id\n" +
-            "join user as u on p.user_id = u.user_id\n" +
+            "join userdata as u on p.user_id = u.user_id\n" +
             "where u.user_id = :userId order by t.name", nativeQuery = true)
     List<String> findAllTagNamesForUserId(@Param(value = "userId") long userId);
 
@@ -39,7 +39,7 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
             "\tfrom posting p\n" +
             "\tleft join posting_tag pt on p.posting_id = pt.post_id\n" +
             "\tleft join tag t on pt.tag_id = t.tag_id\n" +
-            "\tleft join user u on p.user_id = u.user_id\n" +
+            "\tleft join userdata u on p.user_id = u.user_id\n" +
             "\twhere u.user_id = :userId\n" +
             "\tand t.name = :tag\n" +
             ")", nativeQuery = true)

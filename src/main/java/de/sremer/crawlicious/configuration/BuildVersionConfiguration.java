@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BuildVersionConfiguration {
 
-    @Value("${application-version}")
+    @Value("${application-version:}")
     private String version;
 
     @Bean(name = "buildVersion")

@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    vault:
+#      host: localhost
+      host: 192.168.188.73
+      port: 8200
+      scheme: http
+      authentication: TOKEN
+      token: hvs.ubeWm1KsIpC7e4AuvX9aSHkV
+  config:
+    import: vault://

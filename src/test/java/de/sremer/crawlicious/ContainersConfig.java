@@ -3,19 +3,21 @@ package de.sremer.crawlicious;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
-import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class ContainersConfig {
 
-    static String MYSQL_IMAGE = "mariadb:10.3.39";
+    static String POSTGRES_IMAGE = "postgres:13.14";
 
     @Bean
     @ServiceConnection
-    MySQLContainer<?> mysql() {
-        DockerImageName mysql = DockerImageName.parse(MYSQL_IMAGE)
-                .asCompatibleSubstituteFor("mysql");
-        return new MySQLContainer<>(mysql);
+    PostgreSQLContainer<?> postgres() {
+        DockerImageName postgres = DockerImageName.parse(POSTGRES_IMAGE);
+        return new PostgreSQLContainer<>(postgres)
+                .withUsername("postgres")
+                .withPassword("postgres")
+                .withDatabaseName("woofles");
     }
 }

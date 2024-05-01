@@ -16,10 +16,10 @@ import java.util.Base64;
 @Service
 public class MailService {
 
-    @Value("${mailgun.url}")
+    @Value("${mailgun.url:}")
     private String url;
 
-    @Value("${mailgun.apikey}")
+    @Value("${mailgun.apikey:}")
     private String apikey;
 
     @Async

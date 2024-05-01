@@ -16,7 +16,7 @@ import java.util.TreeSet;
 @Entity
 @Getter
 @Setter
-@Table(name = "user")
+@Table(name = "userdata")
 public class User implements Comparable<User> {
 
     @Id

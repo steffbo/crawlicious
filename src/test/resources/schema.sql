@@ -1,91 +1,64 @@
-create table password_reset_token
+CREATE TABLE password_reset_token
 (
-    id          bigint auto_increment
-        primary key,
-    expiry_date datetime     null,
-    token       varchar(255) null,
-    user_id     bigint       not null,
-    valid       bit          not null
-)
-    engine = MyISAM
-    charset = utf8;
+    id          bigint NOT NULL,
+    expiry_date timestamp     DEFAULT NULL,
+    token       varchar(255) DEFAULT NULL,
+    user_id     bigint NOT NULL,
+    valid       bit(1) NOT NULL,
+    PRIMARY KEY (id)
+);
+CREATE INDEX pwd_reset_user_id ON password_reset_token(user_id);
 
-create index FK5lwtbncug84d4ero33v3cfxvl
-    on password_reset_token (user_id);
-
-create table posting
+CREATE TABLE posting
 (
-    posting_id bigint auto_increment
-        primary key,
-    link       varchar(255) null,
-    title      varchar(255) null,
-    user_id    bigint       not null,
-    date       bigint       not null,
-    secret     bit          not null
-)
-    engine = MyISAM
-    charset = utf8;
+    posting_id bigint NOT NULL,
+    link       varchar(255) DEFAULT NULL,
+    title      varchar(255) DEFAULT NULL,
+    user_id    bigint NOT NULL,
+    date       bigint NOT NULL,
+    secret     bit(1) NOT NULL,
+    PRIMARY KEY (posting_id)
+);
+CREATE INDEX posting_user_id ON posting(user_id);
 
-create index FK9jcjpid91kqcndm4o267k1too
-    on posting (user_id);
-
-create table posting_tag
+CREATE TABLE posting_tag
 (
-    post_id bigint not null,
-    tag_id  bigint not null,
-    primary key (post_id, tag_id)
-)
-    engine = MyISAM
-    charset = utf8;
+    post_id bigint NOT NULL,
+    tag_id  bigint NOT NULL,
+    PRIMARY KEY (post_id, tag_id)
+);
+CREATE INDEX posting_tag_tag_id ON posting_tag(tag_id);
 
-create index FKj3x7uaraccgakr4kam2wec6yo
-    on posting_tag (tag_id);
-
-create table role
+CREATE TABLE role
 (
-    role_id bigint auto_increment
-        primary key,
-    role    varchar(255) null
-)
-    engine = MyISAM
-    charset = utf8;
+    role_id bigint NOT NULL,
+    role    varchar(255) DEFAULT NULL,
+    PRIMARY KEY (role_id)
+);
 
-create table tag
+CREATE TABLE tag
 (
-    tag_id bigint auto_increment
-        primary key,
-    name   varchar(255) not null,
-    constraint UK_qp93jyuw586kcgdajsb3tfbjy
-        unique (name)
-)
-    engine = MyISAM
-    charset = utf8;
+    tag_id bigint NOT NULL,
+    name   varchar(255) NOT NULL,
+    PRIMARY KEY (tag_id),
+    UNIQUE (name)
+);
 
-create table user
+CREATE TABLE userdata
 (
-    user_id         bigint auto_increment
-        primary key,
-    email           varchar(255) not null,
-    enabled         bit          not null,
-    name            varchar(255) not null,
-    password        varchar(255) not null,
-    registered_on   bigint       not null,
-    private_profile bit          not null,
-    constraint UK_t8tbwelrnviudxdaggwr1kd9b
-        unique (email)
-)
-    engine = MyISAM
-    charset = utf8;
+    user_id         bigint NOT NULL,
+    email           varchar(255) NOT NULL unique,
+    enabled         bit(1)       NOT NULL,
+    name            varchar(255) NOT NULL,
+    password        varchar(255) NOT NULL,
+    registered_on   bigint NOT NULL,
+    private_profile bit(1)       NOT NULL,
+    PRIMARY KEY (user_id)
+);
 
-create table user_role
+CREATE TABLE user_role
 (
-    user_id bigint not null,
-    role_id bigint not null,
-    primary key (user_id, role_id)
-)
-    engine = MyISAM
-    charset = utf8;
-
-create index FKa68196081fvovjhkek5m97n3y
-    on user_role (role_id);
-
+    user_id bigint NOT NULL,
+    role_id bigint NOT NULL,
+    PRIMARY KEY (user_id, role_id)
+);

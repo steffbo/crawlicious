@@ -23,9 +23,6 @@ dist/
 nbdist/
 .nb-gradle/
 
-application.properties
-application-dev.properties
-buildNumber.properties
 dump*.sql
 pi/
 logs/
