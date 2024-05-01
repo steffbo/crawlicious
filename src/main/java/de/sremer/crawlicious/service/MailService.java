@@ -19,7 +19,7 @@ public class MailService {
     @Value("${mailgun.url:}")
     private String url;
 
-    @Value("${mailgun.apikey:}")
+    @Value("${mailgun.apikey:secret}")
     private String apikey;
 
     @Async

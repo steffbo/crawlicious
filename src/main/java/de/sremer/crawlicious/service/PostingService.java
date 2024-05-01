@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,11 +51,11 @@ public class PostingService {
         return new PageImpl<>(subList, pageable, count);
     }
 
-    public Posting getPostingById(long id) {
+    public Posting getPostingById(UUID id) {
         return this.postingRepository.findById(id).get();
     }
 
-    public void deletePostingById(long id) {
+    public void deletePostingById(UUID id) {
         this.postingRepository.deleteById(id);
     }
 
@@ -67,18 +68,18 @@ public class PostingService {
         this.postingRepository.save(posting);
     }
 
-    public void addTagToPosting(long postingId, String tag) {
+    public void addTagToPosting(UUID postingId, String tag) {
         Posting posting = postingRepository.getOne(postingId);
         posting.addTag(tagService.getTagByName(tag));
     }
 
-    public void removeTagFromPosting(Long postingId, Long tagId) {
+    public void removeTagFromPosting(UUID postingId, UUID tagId) {
         Posting posting = postingRepository.getOne(postingId);
         Tag tag = tagService.getTag(tagId);
         posting.removeTag(tag);
     }
 
-    public boolean linkAlreadyExists(Long userId, String url) {
+    public boolean linkAlreadyExists(UUID userId, String url) {
         User user = userRepository.findUserById(userId);
         List<Posting> postings = postingRepository.findAllByUser(user);
         return postings.stream().anyMatch(p -> p.getLink().contains(url) || url.contains(p.getLink()));

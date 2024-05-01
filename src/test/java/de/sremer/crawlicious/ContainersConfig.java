@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
-@TestConfiguration(proxyBeanMethods = false)
+@TestConfiguration
 public class ContainersConfig {
 
     static String POSTGRES_IMAGE = "postgres:13.14";
@@ -15,9 +15,6 @@ public class ContainersConfig {
     @ServiceConnection
     PostgreSQLContainer<?> postgres() {
         DockerImageName postgres = DockerImageName.parse(POSTGRES_IMAGE);
-        return new PostgreSQLContainer<>(postgres)
-                .withUsername("postgres")
-                .withPassword("postgres")
-                .withDatabaseName("woofles");
+        return new PostgreSQLContainer<>(postgres);
     }
 }

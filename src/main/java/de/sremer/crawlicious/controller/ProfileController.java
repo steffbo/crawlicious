@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/profile")
@@ -48,7 +49,7 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView profileById(HttpServletRequest request, @PathVariable(value = "id") long id,
+    public ModelAndView profileById(HttpServletRequest request, @PathVariable(value = "id") UUID id,
                                     @RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                     @RequestParam(value = "size", required = false, defaultValue = "10") int size,
                                     @RequestParam(value = "tags", required = false) String tags) {

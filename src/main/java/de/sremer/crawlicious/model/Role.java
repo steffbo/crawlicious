@@ -4,20 +4,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
+
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "role")
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
-    private long id;
+    @UuidGenerator
+    private UUID id;
 
-    @Column(name = "role")
     private String role;
 
     @Override

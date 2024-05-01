@@ -28,7 +28,7 @@ public class SecurityConfiguration {
     @Qualifier("userService")
     private final UserDetailsService userDetailsService;
 
-    @Value("${rememberme-key:}")
+    @Value("${rememberme-key:remember}")
     private String rememberMeKey;
 
     @Bean

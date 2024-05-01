@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/postings")
@@ -37,7 +38,7 @@ public class PostingController {
     }
 
     @GetMapping(value = "/exists")
-    public boolean linkAlreadyExists(@RequestParam(value = "id") Long id,
+    public boolean linkAlreadyExists(@RequestParam(value = "id") UUID id,
                                      @RequestParam(value = "url") String url) {
         System.out.println("id = " + id);
         System.out.println("url = " + url);
@@ -46,10 +47,10 @@ public class PostingController {
 
     @PostMapping(value = "/insert")
     public ModelAndView insertPosting(
-            @Validated @RequestParam(value = "title", required = true) String title,
-            @Validated @RequestParam(value = "link", required = true) String link,
-            @RequestParam(value = "tags", required = true) String tags,
-            @RequestParam(value = "secret", required = true) String secret) {
+            @Validated @RequestParam(value = "title") String title,
+            @Validated @RequestParam(value = "link") String link,
+            @RequestParam(value = "tags") String tags,
+            @RequestParam(value = "secret") String secret) {
 
         UrlValidator urlValidator = new UrlValidator();
 
@@ -77,13 +78,13 @@ public class PostingController {
 
     @PostMapping(value = "/update")
     public ModelAndView updatetPosting(
-            @RequestParam(value = "id", required = true) String id,
-            @RequestParam(value = "title", required = true) String title,
-            @RequestParam(value = "link", required = true) String link,
-            @RequestParam(value = "tags", required = true) String tags,
-            @RequestParam(value = "secret", required = true) String secret) {
+            @RequestParam(value = "id") UUID id,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "link") String link,
+            @RequestParam(value = "tags") String tags,
+            @RequestParam(value = "secret") String secret) {
 
-        Posting posting = postingService.getPostingById(Long.parseLong(id));
+        Posting posting = postingService.getPostingById(id);
         posting.setTitle(title);
         posting.setLink(link);
         posting.setTags(MyUtility.parseTags(tagService, tags));
@@ -94,7 +95,7 @@ public class PostingController {
     }
 
     @GetMapping(value = "/update/{id}")
-    public ModelAndView updatePosting(@PathVariable("id") int id) {
+    public ModelAndView updatePosting(@PathVariable("id") UUID id) {
         var modelAndView = new UserModelAndView(userService);
         User currentUser = userService.getCurrentUser();
         Posting posting = postingService.getPostingById(id);
@@ -112,19 +113,19 @@ public class PostingController {
 
     @PostMapping(value = "/update/tag/add/")
     public ModelAndView addTag(
-            @RequestParam(value = "postingId", required = true) String postingId,
-            @RequestParam(value = "tag", required = true) String tag) {
+            @RequestParam(value = "postingId") UUID postingId,
+            @RequestParam(value = "tag") String tag) {
 
-        postingService.addTagToPosting(Long.parseLong(postingId), tag);
+        postingService.addTagToPosting(postingId, tag);
         return new UserModelAndView(userService, "redirect:/profile");
     }
 
     @PostMapping(value = "/update/tag/remove/")
     public ModelAndView removeTag(
-            @RequestParam(value = "postingId", required = true) String postingId,
-            @RequestParam(value = "tagId", required = true) String tagId) {
+            @RequestParam(value = "postingId") UUID postingId,
+            @RequestParam(value = "tagId") UUID tagId) {
 
-        postingService.removeTagFromPosting(Long.valueOf(postingId), Long.valueOf(tagId));
+        postingService.removeTagFromPosting(postingId, tagId);
         return new UserModelAndView(userService, "redirect:/profile");
     }
 
@@ -134,7 +135,7 @@ public class PostingController {
     }
 
     @PostMapping(value = "/csv_import")
-    public ModelAndView csvImportPost(@RequestParam(value = "csv", required = true) String csv) {
+    public ModelAndView csvImportPost(@RequestParam(value = "csv") String csv) {
 
         String[] lines = csv.split("\n");
         for (String line : lines) {
@@ -152,12 +153,12 @@ public class PostingController {
     }
 
     @GetMapping(value = "/{id}")
-    public Posting getPostingById(@PathVariable("id") int id) {
+    public Posting getPostingById(@PathVariable("id") UUID id) {
         return postingService.getPostingById(id);
     }
 
     @GetMapping(value = "/delete/{id}")
-    public ModelAndView deletePostingById(@PathVariable("id") int id) {
+    public ModelAndView deletePostingById(@PathVariable("id") UUID id) {
         postingService.deletePostingById(id);
         return new UserModelAndView(userService, "redirect:/profile");
     }

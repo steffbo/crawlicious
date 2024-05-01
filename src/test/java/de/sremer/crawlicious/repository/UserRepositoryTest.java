@@ -50,7 +50,7 @@ public class UserRepositoryTest {
         List<User> users = userRepository.findUserByName("user");
 
         // then
-        assertSame(users.get(0).getId(), user.getId());
+        assertThat(users.get(0).getId()).isEqualTo(user.getId());
     }
 
     @Test

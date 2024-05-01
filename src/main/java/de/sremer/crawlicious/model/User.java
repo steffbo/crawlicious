@@ -4,14 +4,15 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.usertype.UserType;
 import org.springframework.data.annotation.Transient;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @Entity
 @Getter
@@ -20,9 +21,8 @@ import java.util.TreeSet;
 public class User implements Comparable<User> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private long id;
+    @UuidGenerator
+    private UUID id;
 
     private String name;
 
@@ -50,8 +50,7 @@ public class User implements Comparable<User> {
     private Set<Posting> postings;
 
     public Set<Posting> getPostings() {
-        TreeSet<Posting> treeSet = new TreeSet(postings);
-        return treeSet;
+        return new TreeSet<>(postings);
     }
 
     public String getRegistrationDate(String dateformat) {

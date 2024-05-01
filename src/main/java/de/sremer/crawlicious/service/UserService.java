@@ -56,7 +56,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User getOne(long id) {
+    public User getOne(UUID id) {
         return userRepository.findUserById(id);
     }
 
@@ -106,8 +106,8 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll(pageable);
     }
 
-    public void deleteUser(String id) {
-        User user = getOne(Long.parseLong(id));
+    public void deleteUser(UUID id) {
+        User user = getOne(id);
         postingService.deleteAllPostingsByUser(user);
         userRepository.delete(user);
     }

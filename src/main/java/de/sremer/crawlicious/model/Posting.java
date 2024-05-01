@@ -5,23 +5,23 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Entity
 @Getter
 @Setter
-@Table(name = "posting")
 public class Posting implements Comparable<Posting> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "posting_id")
-    private long id;
+    @UuidGenerator
+    private UUID id;
 
     private String title;
 
@@ -38,7 +38,7 @@ public class Posting implements Comparable<Posting> {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "posting_tag",
-            joinColumns = @JoinColumn(name = "post_id"),
+            joinColumns = @JoinColumn(name = "posting_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @Getter(AccessLevel.NONE)
     private Set<Tag> tags;

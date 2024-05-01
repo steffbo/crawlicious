@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -13,7 +14,7 @@ public class TagService {
 
     private final TagRepository tagRepository;
 
-    public Tag getTag(long id) {
+    public Tag getTag(UUID id) {
         return this.tagRepository.findById(id).get();
     }
 
@@ -26,11 +27,11 @@ public class TagService {
         return tagRepository.findByNameIn(tags.split(" "));
     }
 
-    public List<Tag> getTagsByUserId(long userId) {
+    public List<Tag> getTagsByUserId(UUID userId) {
         return tagRepository.findEverythingForUserId(userId);
     }
 
-    public List<String> getTagNamesByUserId(long userId) {
+    public List<String> getTagNamesByUserId(UUID userId) {
         return tagRepository.findAllTagNamesForUserId(userId);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin")
@@ -40,7 +41,7 @@ public class AdminController {
     }
 
     @GetMapping("/users/delete/{id}")
-    public ModelAndView adminUsers(@PathVariable String id) {
+    public ModelAndView adminUsers(@PathVariable UUID id) {
         userService.deleteUser(id);
         return new UserModelAndView(userService, "redirect:/admin/users");
     }
