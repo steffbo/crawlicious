@@ -1,5 +1,6 @@
 **Web application for bookmarks**
 
+![Build](https://github.com/steffbo/crawlicious/actions/workflows/maven.yml/badge.svg)
 
 **To-do:** 
 * search for tags
