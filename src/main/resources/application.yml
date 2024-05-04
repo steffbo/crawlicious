@@ -1,0 +1,41 @@
+application-version: '@project.version@'
+
+spring:
+  application:
+    name: woofles
+  config:
+    import:
+      - optional:file:.env[.properties]
+      - vault://
+
+  datasource:
+    username: ${db_user}
+    password: ${db_password}
+    url: jdbc:postgresql://localhost:5432/woofles
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  cloud:
+    vault:
+      host: localhost
+#      host: 192.168.188.73
+      port: 8200
+      scheme: http
+      authentication: TOKEN # stored at ~/.vault-token
+
+  mail:
+    host: smtp.mailgun.org
+    password: ${mail_password}
+    port: 587
+    username: postmaster@woofl.es
+
+  thymeleaf:
+    cache: false
+    mode: HTML
+
+mailgun:
+  apikey: ${mailgun_apikey}
+  url: https://api.mailgun.net/v3/woofl.es
+
+rememberme-key: ${rememberme-key}

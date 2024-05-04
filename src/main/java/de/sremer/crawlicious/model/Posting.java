@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.text.SimpleDateFormat;
@@ -35,12 +36,13 @@ public class Posting implements Comparable<Posting> {
 
     private boolean secret;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "posting_tag",
             joinColumns = @JoinColumn(name = "posting_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @Getter(AccessLevel.NONE)
+    @BatchSize(size = 500)
     private Set<Tag> tags;
 
     public Posting(String title, String link, Set<Tag> tags) {
@@ -60,12 +62,12 @@ public class Posting implements Comparable<Posting> {
 
     public void addTag(Tag tag) {
         tags.add(tag);
-        tag.getPosts().add(this);
+//        tag.getPosts().add(this);
     }
 
     public void removeTag(Tag tag) {
         tags.remove(tag);
-        tag.getPosts().remove(this);
+//        tag.getPosts().remove(this);
     }
 
     public String getShortenedLink() {

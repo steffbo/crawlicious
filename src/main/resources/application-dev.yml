@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    vault:
+      host: 192.168.188.73
+
+  datasource.url: jdbc:postgresql://192.168.188.73:5432/woofles
+  jpa.show-sql: true
+
+rememberme-key: remember-dev

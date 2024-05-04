@@ -33,7 +33,7 @@ CREATE TABLE posting
 CREATE TABLE posting_tag
 (
     posting_id uuid NOT NULL,
-    tag_id  uuid NOT NULL,
+    tag_id     uuid NOT NULL,
     PRIMARY KEY (posting_id, tag_id)
 );
 

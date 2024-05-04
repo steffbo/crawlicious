@@ -19,19 +19,25 @@ public interface PostingRepository extends JpaRepository<Posting, UUID> {
     Page<Posting> findByUser(User user, Pageable pageable);
 
     @Query(nativeQuery = true, value = """
-            SELECT temp.id, temp.link, temp.title, temp.user_id, temp.date, temp.secret
-                FROM (
-                select p.id, p.link, p.title, p.user_id, p.date, p.secret
-                from posting as p
-                inner join userdata as u on p.user_id = u.id and u.id = :userId
-                inner join posting_tag as pt on p.id = pt.posting_id
-                inner join tag as t on pt.tag_id = t.id
-                where lower(t.name) in :tags
-                ) as temp
-                GROUP BY temp.id
-                having count(*) >= :#{#tags.size()}
-                ORDER BY temp.date desc
+              SELECT p.*
+              FROM posting p
+                       JOIN posting_tag pt ON p.id = pt.posting_id
+                       JOIN tag t ON pt.tag_id = t.id
+              WHERE p.user_id = :userId
+                AND lower(t.name) IN (:tags)
+              GROUP BY p.id
+              HAVING COUNT(DISTINCT t.name) >= :#{#tags.size()}
+            """
+            , countQuery = """
+            SELECT COUNT(p)
+              FROM posting p
+                       JOIN posting_tag pt ON p.id = pt.posting_id
+                       JOIN tag t ON pt.tag_id = t.id
+              WHERE p.user_id = :userId
+                AND lower(t.name) IN (:tags)
+              GROUP BY p.id
+              HAVING COUNT(DISTINCT t.name) >= :#{#tags.size()}
             """
     )
-    List<Posting> findByUserAndTags(UUID userId, List<String> tags);
+    Page<Posting> findByUserAndTags(UUID userId, List<String> tags, Pageable pageable);
 }

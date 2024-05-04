@@ -15,7 +15,7 @@ public class TagService {
     private final TagRepository tagRepository;
 
     public Tag getTag(UUID id) {
-        return this.tagRepository.findById(id).get();
+        return tagRepository.findById(id).get();
     }
 
     public Tag getTagByName(String tagName) {

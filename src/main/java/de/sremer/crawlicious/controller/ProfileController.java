@@ -34,15 +34,14 @@ public class ProfileController {
     public ModelAndView profile(
             HttpServletRequest request,
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            @RequestParam(value = "tags", required = false) String tags) {
 
-        var modelAndView = new UserModelAndView(userService);
+        var modelAndView = new UserModelAndView(userService, "redirect:/");
 
         User user = userService.getCurrentUser();
         if (user != null) {
-            return profileById(request, user.getId(), page, size, null);
-        } else {
-            modelAndView.setViewName("redirect:/");
+            return profileById(request, user.getId(), page, size, tags);
         }
 
         return modelAndView;
@@ -60,17 +59,13 @@ public class ProfileController {
 
         try {
             User user = userService.getOne(id);
-            User ownUser = userService.getCurrentUser();
-            if (user.getName().isEmpty()) {
-                modelAndView.setViewName("redirect:/");
-                return modelAndView;
-            }
             modelAndView.addObject("user", user);
-            boolean ownProfile = user.getEmail().equals(ownUser.getEmail());
-            if (!ownProfile && user.isPrivateProfile()) {
+            if (user.getName().isEmpty() || user.isPrivateProfile()) {
                 modelAndView.setViewName("redirect:/");
                 return modelAndView;
             }
+            User ownUser = userService.getCurrentUser();
+            boolean ownProfile = ownUser != null && user.getEmail().equals(ownUser.getEmail());
             modelAndView.addObject("ownProfile", ownProfile);
 
             Page<Posting> postings;

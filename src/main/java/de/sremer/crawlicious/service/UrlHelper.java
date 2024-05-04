@@ -34,7 +34,7 @@ public class UrlHelper {
         }
 
         List<String> tagList = Arrays.asList(tags);
-        tagList = tagList.stream().filter(i -> !i.equals(tag)).collect(Collectors.toList());
+        tagList = tagList.stream().filter(i -> !i.equals(tag)).toList();
         if (tagList.isEmpty()) {
             return url;
         } else {
