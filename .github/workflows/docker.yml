@@ -28,8 +28,7 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository }}/woofles:latest
-          secrets:
-            - VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
+          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
 
       - name: Run Docker container
         run: |
