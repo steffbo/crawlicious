@@ -3,8 +3,8 @@ name: Build and Push Docker Image
 on:
   push:
     branches: [ main ]
-    tags:
-      - 'v*'
+#    tags:
+#      - 'v*'
 
 jobs:
   build:
@@ -25,16 +25,16 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker meta
-        uses: docker/metadata-action@v5
-        with:
-          # generate Docker tags based on the following events/attributes
-          tags: |
-            type=semver,pattern={{version}}
+#      - name: Docker meta
+#        uses: docker/metadata-action@v5
+#        with:
+#          # generate Docker tags based on the following events/attributes
+#          tags: |
+#            type=semver,pattern={{version}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: latest
