@@ -18,11 +18,9 @@ spring:
 
   cloud:
     vault:
-      host: localhost
-#      host: 192.168.188.73
-      port: 8200
       scheme: http
-      authentication: TOKEN # stored at ~/.vault-token
+      token: ${VAULT_TOKEN} # from GitHub secrets
+      host: 172.17.0.1 # docker host ip
 
   mail:
     host: smtp.mailgun.org
@@ -39,3 +37,16 @@ mailgun:
   url: https://api.mailgun.net/v3/woofl.es
 
 rememberme-key: ${rememberme-key}
+
+--- # dev properties
+spring:
+  config.activate.on-profile: dev
+  cloud:
+    vault:
+      host: 192.168.188.73
+      token: null # from ~/.vault-token
+
+  datasource.url: jdbc:postgresql://192.168.188.73:5432/woofles
+  jpa.show-sql: true
+
+rememberme-key: remember-dev
