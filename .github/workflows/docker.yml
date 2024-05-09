@@ -23,15 +23,16 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Docker meta
+        uses: docker/metadata-action@v5
+        with:
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=semver,pattern={{version}}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}/woofles:${{ github.sha }}
-          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-
-      - name: Run Docker container
-        run: |
-          echo $VAULT_TOKEN > ~/.vault-token
-          docker run -d -p 8080:8080 -v ~/.vault-token:/root/.vault-token my-spring-app
+          tags: ${{ steps.meta.outputs.tags }}
