@@ -19,4 +19,4 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Run the application
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar", "--spring.cloud.vault.token=${VAULT_TOKEN}"]
