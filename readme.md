@@ -1,10 +1,11 @@
-**Web application for bookmarks**
+# Woofles
+
+**Web application for bookmarks with tags**
 
 ![Build](https://github.com/steffbo/crawlicious/actions/workflows/maven.yml/badge.svg)
 
-**To-do:** 
-* search for tags
-* user picture
-* user settings: change (pw, name, picture)
-* logo
-* posting feed for homepage
+### Run on local
+
+* Be in same network as the database 
+* Set profile to `dev`
+* Add VM argument: `-DVAULT_TOKEN=`

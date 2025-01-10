@@ -42,9 +42,11 @@
 
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="text" class="check">
-                        <label class="random">Enter Random Number
-                        </label>
+                        <div class="cf-challenge"
+                             data-sitekey="0x4AAAAAAA5AfH2YtVPaYysj"
+                             data-callback="onTurnstileSubmit"
+                             data-theme="auto">
+                        </div>
                     </div>
                 </div>
 
@@ -61,39 +63,6 @@
     </div>
 </div>
 
-<script>
-
-    $(document).ready(function () {
-        var form = $(".form");
-        var name = $(".name");
-        var email = $(".email");
-        var password = $(".password");
-        var submitButton = $(".submit");
-        var checkInput = $(".check");
-        var randomLabel = $(".random");
-
-        var randomNumber = Math.floor(Math.random() * 101);
-        console.log("random" + randomNumber);
-
-        randomLabel.text("Enter Random Number " + randomNumber);
-
-        submitButton.click(function (event) {
-            event.preventDefault();
-
-            if (!name.val() || !email.val() || !password.val()) {
-                return false;
-            }
-
-            if (checkInput.val() === randomNumber.toString()) {
-                form.submit();
-                return;
-            }
-            console.log("wrong number");
-        });
-
-    });
-
-</script>
-
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>

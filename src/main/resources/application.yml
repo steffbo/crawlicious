@@ -19,7 +19,7 @@ spring:
   cloud:
     vault:
       scheme: http
-      token: ${VAULT_TOKEN} # from GitHub secrets
+      token: ${VAULT_TOKEN}
       host: 172.17.0.1 # docker host ip
 
   mail:
@@ -36,6 +36,7 @@ mailgun:
   apikey: ${mailgun_apikey}
   url: https://api.mailgun.net/v3/woofl.es
 
+turnstile.secret: ${turnstile_secret}
 rememberme-key: ${rememberme-key}
 
 --- # dev properties
@@ -44,7 +45,6 @@ spring:
   cloud:
     vault:
       host: 192.168.188.73
-      token: null # from ~/.vault-token
 
   datasource.url: jdbc:postgresql://192.168.188.73:5432/woofles
   jpa.show-sql: true

@@ -4,6 +4,8 @@ import de.sremer.crawlicious.model.User;
 import de.sremer.crawlicious.service.MailService;
 import de.sremer.crawlicious.service.SecurityService;
 import de.sremer.crawlicious.service.UserService;
+import de.sremer.crawlicious.service.external.TurnstileService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +24,7 @@ public class LoginController {
     private final UserService userService;
     private final SecurityService securityService;
     private final MailService mailService;
+    private final TurnstileService turnstileService;
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public ModelAndView login() {
@@ -45,7 +48,16 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public ModelAndView createNewUser(@Validated User user, BindingResult bindingResult) {
+    public ModelAndView createNewUser(@Validated User user, BindingResult bindingResult,
+        @RequestParam(name = "cf-turnstile-response", required = false) String cfResponse,
+        HttpServletRequest request) {
+
+        boolean isHuman = turnstileService.verify(cfResponse, request.getRemoteAddr());
+        if (!isHuman) {
+            bindingResult.rejectValue("email", "error.user",
+                    "You must be human to register");
+        }
+
         var modelAndView = new UserModelAndView(userService);
         modelAndView.setViewName("registration");
         User userExists = userService.findUserByEmail(user.getEmail());
