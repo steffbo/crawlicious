@@ -11,7 +11,7 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # Stage 2: Run the application
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk-slim
 
 WORKDIR /app
 
@@ -19,4 +19,4 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Run the application
-CMD ["java", "-jar", "app.jar", "--spring.cloud.vault.token=${VAULT_TOKEN}"]
+CMD ["java", "-jar", "app.jar"]

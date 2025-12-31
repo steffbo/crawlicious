@@ -1,3 +1,2 @@
 spring:
-  cloud.vault.enabled: false
   sql.init.mode: always
