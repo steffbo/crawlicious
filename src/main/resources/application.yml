@@ -6,25 +6,18 @@ spring:
   config:
     import:
       - optional:file:.env[.properties]
-      - vault://
 
   datasource:
-    username: ${db_user}
-    password: ${db_password}
-    url: jdbc:postgresql://172.17.0.1:5432/woofles
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST:172.17.0.1}:${DB_PORT:5432}/woofles
   jpa:
     hibernate:
       ddl-auto: none
 
-  cloud:
-    vault:
-      scheme: http
-      token: ${VAULT_TOKEN}
-      host: 172.17.0.1 # docker host ip
-
   mail:
     host: smtp.mailgun.org
-    password: ${mail_password}
+    password: ${MAIL_PASSWORD}
     port: 587
     username: postmaster@woofl.es
 
@@ -33,20 +26,16 @@ spring:
     mode: HTML
 
 mailgun:
-  apikey: ${mailgun_apikey}
+  apikey: ${MAILGUN_APIKEY}
   url: https://api.mailgun.net/v3/woofl.es
 
-turnstile.secret: ${turnstile_secret}
-rememberme-key: ${rememberme-key}
+turnstile.secret: ${TURNSTILE_SECRET}
+rememberme-key: ${REMEMBERME_KEY}
 
 --- # dev properties
 spring:
   config.activate.on-profile: dev
-  cloud:
-    vault:
-      host: 192.168.188.73
-
-  datasource.url: jdbc:postgresql://192.168.188.73:5432/woofles
+  datasource.url: jdbc:postgresql://${DB_HOST:192.168.188.73}:${DB_PORT:5432}/woofles
   jpa.show-sql: true
 
 rememberme-key: remember-dev
